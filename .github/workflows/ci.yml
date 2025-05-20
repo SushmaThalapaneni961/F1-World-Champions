@@ -1,0 +1,75 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:6
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.stats()'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    # ---------- FRONTEND ----------
+    - name: Install frontend dependencies
+      working-directory: frontend
+      run: npm ci
+
+    - name: Lint frontend
+      working-directory: frontend
+      run: npm run lint
+
+    - name: Test frontend
+      working-directory: frontend
+      run: npm run test -- --watch=false --ci
+
+    - name: Build frontend
+      working-directory: frontend
+      run: npm run build
+
+    # ---------- BACKEND ----------
+    - name: Install backend dependencies
+      working-directory: backend
+      run: npm ci
+
+    - name: Lint backend
+      working-directory: backend
+      run: npm run lint
+
+    - name: Test backend
+      working-directory: backend
+      env:
+        MONGO_URL: mongodb://localhost:27017/testdb
+      run: npm run test
+
+    - name: Build backend
+      working-directory: backend
+      run: npm run build
