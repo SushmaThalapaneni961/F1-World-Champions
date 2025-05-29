@@ -1,0 +1,8 @@
+@use './variables' as *;
+@use './reset' as *;
+
+// Your global styles
+body {
+  font-family: $font-family;
+  color: $text-color;
+}

@@ -1,17 +1,15 @@
-import mongoose, { model, Model, Schema } from "mongoose";
+import mongoose, { Schema, Model } from 'mongoose';
+import { ISeason } from '../types/season.types';
 
-interface ISeason extends Document {
-  season: string; // Use number to match schema
-  url: string;
-  year: number;
-}
-
-
-const seasonSchema = new Schema<ISeason>({
+const SeasonSchema = new Schema<ISeason>({
   season: { type: String, required: true, unique: true },
-  url: { type: String, required: true },
-  year: { type: Number, required: true, unique: true },
+  champion: {
+    givenName: String,
+    familyName: String,
+    fullName: String,
+    nationality: String,
+  },
 });
 
-const Season: Model<ISeason> = model<ISeason>('Season', seasonSchema);
+const Season = mongoose.models.Season as Model<ISeason> || mongoose.model<ISeason>('Season', SeasonSchema);
 export default Season;

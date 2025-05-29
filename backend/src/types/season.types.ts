@@ -1,18 +1,14 @@
-export interface SeasonChampion {
-  season: string;
-  driverId: string;
+export interface Champion {
+  driverId?: string;
   givenName: string;
   familyName: string;
-  wins: number;
+  fullName: string;
+  nationality: string;
+  laps?: string;
+  time?: string;
 }
 
-export interface RaceWinner {
-  round: string;
-  raceName: string;
-  date: string;
-  winner: {
-    driverId: string;
-    givenName: string;
-    familyName: string;
-  };
+export interface ISeason {
+  season: string;
+  champion?: Champion | null;
 }

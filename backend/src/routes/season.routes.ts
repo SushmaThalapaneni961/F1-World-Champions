@@ -1,9 +1,10 @@
 import express from 'express';
+import { getAllRaces } from '../controllers/raceController';
 import { getAllSeasons } from '../controllers/seasonController';
 
 const router = express.Router();
 
-// GET /api/seasons
 router.get('/', getAllSeasons);
+router.get('/:seasonId/races', getAllRaces);
 
 export default router;

@@ -4,7 +4,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - "4000:5173" # HOST:CONTAINER (Vite runs on 5173 inside container)
+      - "5173:5173" # HOST:CONTAINER (Vite runs on 5173 inside container)
     depends_on:
       - backend
     networks:
@@ -40,6 +40,8 @@ services:
       - "8081:8081"
     environment:
       - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_USER}
+      - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_EXPRESS_PASS}
     depends_on:
       - mongo
     networks:
@@ -48,7 +50,7 @@ services:
   redis:
     image: redis:7
     ports:
-      - "6379:6379"
+      - "6379:6379" # Both host and container use the same port
     networks:
       - app-network
 
