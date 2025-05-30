@@ -1,1 +1,1 @@
-export * from './apiResponse.model';
+export type { ApiResponse } from './apiResponse.model';

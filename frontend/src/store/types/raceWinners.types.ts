@@ -12,7 +12,7 @@ interface Winner {
   time: Circuit;
 }
 
-interface IRaceWinner {
+export interface IRaceWinner {
   season: string;
   round: string;
   raceName: string;
@@ -21,5 +21,3 @@ interface IRaceWinner {
   winner: Winner;
   isChampionWinner: boolean;
 }
-
-export { IRaceWinner };

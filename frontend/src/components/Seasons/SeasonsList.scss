@@ -1,0 +1,71 @@
+@import '../../styles/_variables';
+
+.seasons-list {
+  &__title {
+    text-align: center;
+    margin-bottom: $spacing-xl;
+    color: $secondary-color;
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  &__grid {
+    display: grid;
+    gap: $spacing-md;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    padding: 0 $spacing-md;
+
+    @media (min-width: $breakpoint-md) {
+      gap: $spacing-lg;
+    }
+  }
+}
+
+.season-card {
+  background-color: white;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  text-decoration: none;
+  color: $text-color;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform $transition-fast, box-shadow $transition-fast;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &--selected {
+    border: 2px solid $primary-color;
+  }
+
+  &__year {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $primary-color;
+  }
+
+  &__champion {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  &__champion-label {
+    font-size: 0.9rem;
+    color: $gray-medium;
+  }
+
+  &__champion-name {
+    font-weight: 600;
+    color: $secondary-color;
+  }
+
+  &__champion-nationality {
+    font-size: 0.9rem;
+    color: $gray-medium;
+  }
+} 

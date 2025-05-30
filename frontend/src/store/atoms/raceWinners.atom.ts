@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { APIError } from '../../lib/api/errorHandler';
 import { getRacesBySeason } from '../api/raceWinnersApi';
-import { IRaceWinner } from '../types';
+import type { IRaceWinner } from '../types/raceWinners.types';
 
 export const seasonRaceWinnersAtom =  atom<IRaceWinner[]>([]);
 export const loadingAtom = atom(false);

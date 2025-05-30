@@ -4,24 +4,24 @@ import RaceWinners from '../pages/RaceWinners/RaceWinners';
 import Seasons from '../pages/Seasons/Seasons';
 
 const router = createBrowserRouter([
-    // {
-      // path: 'seasons',
-      // element: <Layout />,
-      // children: [
-        {
-            path: '/seasons',
-            element: <Seasons />,
-        },
-        {
-          path: '/racewinners/:season',
-          element: <RaceWinners />,
-        },
-      // ],
-    // },
-    {
-      path: '*',
-      element: '404 Not Found',
-    },
-  ]);
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <Seasons />,
+      },
+      {
+        path: 'seasons',
+        element: <Seasons />,
+      },
+      {
+        path: 'raceWinners/:season',
+        element: <RaceWinners />,
+      },
+    ],
+  },
+]);
   
-  export default router;
+export default router;

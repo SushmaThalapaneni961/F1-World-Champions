@@ -11,11 +11,12 @@ import { sendError, sendSuccess } from '../utils/response';
 // Fetch all races winners for a specific season
 export const getAllRaces = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { seasonId } = req.params;
-    if (!seasonId) {
-      return sendError(res, 'SeasonId is required', 400);
+    const { season } = req.params;
+    console.log(req.params, req, "req params")
+    if (!season) {
+      return sendError(res, 'Season/Year is required', 400);
     }
-    const cacheKey = `${CACHE_KEYS.RACES}_${seasonId}`;
+    const cacheKey = `${CACHE_KEYS.RACES}_${season}`;
     // Check cache first
     const cached = await redisClient.get(cacheKey);
     if (cached) {
@@ -25,13 +26,13 @@ export const getAllRaces = async (req: Request, res: Response, next: NextFunctio
     }
 
     // 1. Get champion for the season
-    const champion = await getSeasonChampion(seasonId);
+    const champion = await getSeasonChampion(season);
     const championName = champion?.fullName ?? null;
 
     // 2. Get races from DB or external API
-    let races = await getRacesBySeasonFromDb(seasonId);
+    let races = await getRacesBySeasonFromDb(season);
     if (!races.length) {
-      races = await fetchAndStoreRaceWinnersForSeason(seasonId);
+      races = await fetchAndStoreRaceWinnersForSeason(season);
     }
 
     // 3. Mark if the race winner is the champion
@@ -46,13 +47,13 @@ export const getAllRaces = async (req: Request, res: Response, next: NextFunctio
     const responseToCache = {
       status: 'success',
       statusCode: 200,
-      message: `Race winners for season ${seasonId}`,
+      message: `Race winners for season ${season}`,
       data: raceData,
     };
 
     await redisClient.setEx(cacheKey, CACHE_TTL.ONE_HOUR, JSON.stringify(responseToCache)); // Cache for 1 hour
 
-    return sendSuccess(res, raceData, `Race winners for season ${seasonId}`);
+    return sendSuccess(res, raceData, `Race winners for season ${season}`);
   } catch (err: any) {
     next(err);
   }

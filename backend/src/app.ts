@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(requestLogger); // Logs every request
 
 app.use(ROUTES.SEASONS, seasonRoutes);
-app.use(ROUTES.SEASON_RACES(':seasonId'), raceRoutes);
+app.use(ROUTES.SEASON_RACES(':season'), raceRoutes);
 
 app.use(errorHandler); // Catch all errors
 

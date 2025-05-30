@@ -1,3 +1,5 @@
+@import '../../styles/variables';
+
 .container {
   padding: 1rem;
 }
@@ -30,5 +32,141 @@
     padding: 0.75rem;
     border: 1px solid #ccc;
     text-align: left;
+  }
+}
+
+.seasons-wrapper {
+  padding: $spacing-lg;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .page-title {
+    color: $secondary-color;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: $spacing-xl;
+    
+    span {
+      color: $primary-color;
+    }
+  }
+}
+
+.desktop-table {
+  display: none;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  @media (min-width: $breakpoint-md) {
+    display: table;
+  }
+
+  thead {
+    background-color: $secondary-color;
+    color: white;
+
+    th {
+      padding: $spacing-md;
+      font-weight: 600;
+      text-align: left;
+      font-size: 1.1rem;
+    }
+  }
+
+  tbody {
+    tr {
+      cursor: pointer;
+      transition: background-color $transition-fast;
+
+      &:nth-child(even) {
+        background-color: $gray-light;
+      }
+
+      &:hover {
+        background-color: rgba($primary-color, 0.05);
+      }
+
+      &.champion-row {
+        background-color: rgba($accent-color, 0.1);
+      }
+
+      td {
+        padding: $spacing-md;
+        border-bottom: 1px solid $gray-medium;
+
+        &.champion-name {
+          font-weight: 600;
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+.mobile-cards {
+  display: grid;
+  gap: $spacing-md;
+  padding: $spacing-md;
+
+  @media (min-width: $breakpoint-md) {
+    display: none;
+  }
+
+  .card {
+    background: white;
+    border-radius: $border-radius-lg;
+    padding: $spacing-lg;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform $transition-fast, box-shadow $transition-fast;
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    &.champion-card {
+      border-left: 4px solid $primary-color;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      color: $primary-color;
+      margin-bottom: $spacing-sm;
+    }
+
+    .champion-info {
+      margin-top: $spacing-md;
+      padding-top: $spacing-md;
+      border-top: 1px solid $gray-light;
+
+      .label {
+        font-size: 0.9rem;
+        color: $gray-medium;
+        margin-bottom: $spacing-xs;
+      }
+
+      .value {
+        font-weight: 600;
+        color: $secondary-color;
+      }
+    }
+  }
+}
+
+.status-msg {
+  text-align: center;
+  padding: $spacing-xl;
+  font-size: 1.2rem;
+  color: $secondary-color;
+
+  &.error {
+    color: $error-color;
   }
 }

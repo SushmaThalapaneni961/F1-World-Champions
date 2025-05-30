@@ -1,0 +1,49 @@
+@import '../../styles/_variables';
+
+.header {
+  background-color: $secondary-color;
+  padding: $spacing-md 0;
+  position: sticky;
+  top: 0;
+  z-index: $z-index-header;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__logo {
+    img {
+      height: 40px;
+      width: auto;
+      
+      @media (min-width: $breakpoint-md) {
+        height: 50px;
+      }
+    }
+  }
+
+  &__nav {
+    display: flex;
+    gap: $spacing-md;
+  }
+
+  &__nav-link {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: $border-radius-sm;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    &.active {
+      background-color: $primary-color;
+    }
+  }
+} 

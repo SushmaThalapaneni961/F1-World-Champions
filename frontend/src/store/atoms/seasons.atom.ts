@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { APIError } from '../../lib/api/errorHandler';
 import { getSeasons } from '../api/seasonsApi';
-import { ISeason } from '../types';
+import type { ISeason } from '../types/season.types';
 
 export const seasonsAtom = atom<ISeason[]>([]);
 export const loadingAtom = atom(false);

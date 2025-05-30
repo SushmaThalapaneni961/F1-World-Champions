@@ -5,6 +5,6 @@ import { getAllSeasons } from '../controllers/seasonController';
 const router = express.Router();
 
 router.get('/', getAllSeasons);
-router.get('/:seasonId/races', getAllRaces);
+router.get('/:season/races', getAllRaces);
 
 export default router;

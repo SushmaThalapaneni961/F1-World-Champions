@@ -1,0 +1,174 @@
+@import '../../styles/variables';
+
+.race-winners-wrapper {
+  padding: $spacing-lg;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-xl;
+
+    .page-title {
+      color: $secondary-color;
+      font-size: 2.5rem;
+      font-weight: 700;
+      
+      span {
+        color: $primary-color;
+      }
+    }
+
+    .back-button {
+      padding: $spacing-sm $spacing-md;
+      background-color: $secondary-color;
+      color: white;
+      border: none;
+      border-radius: $border-radius-md;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: $spacing-sm;
+      transition: background-color $transition-fast;
+
+      &:hover {
+        background-color: darken($secondary-color, 10%);
+      }
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+.desktop-table {
+  display: none;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  @media (min-width: $breakpoint-md) {
+    display: table;
+  }
+
+  thead {
+    background-color: $secondary-color;
+    color: white;
+
+    th {
+      padding: $spacing-md;
+      font-weight: 600;
+      text-align: left;
+      font-size: 1.1rem;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background-color $transition-fast;
+
+      &:nth-child(even) {
+        background-color: $gray-light;
+      }
+
+      &:hover {
+        background-color: rgba($primary-color, 0.05);
+      }
+
+      &.winner-row {
+        background-color: rgba($accent-color, 0.1);
+      }
+
+      td {
+        padding: $spacing-md;
+        border-bottom: 1px solid $gray-medium;
+
+        &.winner-name {
+          font-weight: 600;
+          color: $primary-color;
+        }
+
+        &.race-time {
+          font-family: monospace;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+}
+
+.mobile-cards {
+  display: grid;
+  gap: $spacing-md;
+  padding: $spacing-md;
+
+  @media (min-width: $breakpoint-md) {
+    display: none;
+  }
+
+  .card {
+    background: white;
+    border-radius: $border-radius-lg;
+    padding: $spacing-lg;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    &.winner-card {
+      border-left: 4px solid $primary-color;
+    }
+
+    .race-name {
+      font-size: 1.5rem;
+      color: $primary-color;
+      margin-bottom: $spacing-sm;
+    }
+
+    .race-info {
+      display: grid;
+      gap: $spacing-sm;
+      margin-top: $spacing-md;
+      padding-top: $spacing-md;
+      border-top: 1px solid $gray-light;
+
+      .info-row {
+        .label {
+          font-size: 0.9rem;
+          color: $gray-medium;
+          margin-bottom: $spacing-xs;
+        }
+
+        .value {
+          font-weight: 600;
+          color: $secondary-color;
+
+          &.winner-name {
+            color: $primary-color;
+          }
+
+          &.race-time {
+            font-family: monospace;
+          }
+        }
+      }
+    }
+  }
+}
+
+.status-msg {
+  text-align: center;
+  padding: $spacing-xl;
+  font-size: 1.2rem;
+  color: $secondary-color;
+
+  &.error {
+    color: $error-color;
+  }
+}
