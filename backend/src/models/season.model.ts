@@ -11,5 +11,6 @@ const SeasonSchema = new Schema<ISeason>({
   },
 });
 
-const Season = mongoose.models.Season as Model<ISeason> || mongoose.model<ISeason>('Season', SeasonSchema);
+const Season =
+  (mongoose.models.Season as Model<ISeason>) || mongoose.model<ISeason>('Season', SeasonSchema);
 export default Season;

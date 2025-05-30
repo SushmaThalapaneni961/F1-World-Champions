@@ -15,12 +15,12 @@ describe('Race Service', () => {
       // Arrange
       const mockRaces = [
         generateMockRace(),
-        generateMockRace({ round: '2', raceName: 'Spanish Grand Prix' })
+        generateMockRace({ round: '2', raceName: 'Spanish Grand Prix' }),
       ];
-      
+
       const mockFind = jest.fn().mockReturnThis();
       const mockSort = jest.fn().mockResolvedValue(mockRaces);
-      
+
       (Race.find as jest.Mock) = mockFind;
       (Race.find().sort as jest.Mock) = mockSort;
 
@@ -37,7 +37,7 @@ describe('Race Service', () => {
       // Arrange
       const mockFind = jest.fn().mockReturnThis();
       const mockSort = jest.fn().mockResolvedValue([]);
-      
+
       (Race.find as jest.Mock) = mockFind;
       (Race.find().sort as jest.Mock) = mockSort;
 
@@ -54,12 +54,14 @@ describe('Race Service', () => {
       const mockError = new Error('Database connection failed');
       const mockFind = jest.fn().mockReturnThis();
       const mockSort = jest.fn().mockRejectedValue(mockError);
-      
+
       (Race.find as jest.Mock) = mockFind;
       (Race.find().sort as jest.Mock) = mockSort;
 
       // Act & Assert
-      await expect(raceService.getRacesBySeasonFromDb('2023')).rejects.toThrow('Database connection failed');
+      await expect(raceService.getRacesBySeasonFromDb('2023')).rejects.toThrow(
+        'Database connection failed',
+      );
     });
   });
-}); 
+});

@@ -8,6 +8,6 @@ export const ERGAST_ENDPOINTS = {
 };
 
 export const RETRY_CONFIG = {
-    MAX_ATTEMPTS: 3,
-    DELAY_MS: 500,
+  MAX_ATTEMPTS: 3,
+  DELAY_MS: 500,
 };

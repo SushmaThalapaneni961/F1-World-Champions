@@ -17,14 +17,14 @@ describe('Season Champion Service', () => {
                   driverId: 'max_verstappen',
                   givenName: 'Max',
                   familyName: 'Verstappen',
-                  nationality: 'Dutch'
-                }
-              }
-            ]
-          }
-        ]
-      }
-    }
+                  nationality: 'Dutch',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
   };
 
   beforeEach(() => {
@@ -46,14 +46,14 @@ describe('Season Champion Service', () => {
       givenName: 'Max',
       familyName: 'Verstappen',
       fullName: 'Max Verstappen',
-      nationality: 'Dutch'
+      nationality: 'Dutch',
     });
   });
 
   it('should return null when no champion data is found', async () => {
     // Arrange
     (axios.get as jest.Mock).mockResolvedValueOnce({
-      data: { MRData: { StandingsTable: { StandingsLists: [] } } }
+      data: { MRData: { StandingsTable: { StandingsLists: [] } } },
     });
 
     // Act
@@ -78,7 +78,7 @@ describe('Season Champion Service', () => {
   it('should handle malformed API response', async () => {
     // Arrange
     (axios.get as jest.Mock).mockResolvedValueOnce({
-      data: { MRData: {} } // Missing StandingsTable
+      data: { MRData: {} }, // Missing StandingsTable
     });
 
     // Act
@@ -97,13 +97,13 @@ describe('Season Champion Service', () => {
             {
               DriverStandings: [
                 {
-                  Driver: null
-                }
-              ]
-            }
-          ]
-        }
-      }
+                  Driver: null,
+                },
+              ],
+            },
+          ],
+        },
+      },
     };
     (axios.get as jest.Mock).mockResolvedValueOnce({ data: emptyDriverData });
 
@@ -113,4 +113,4 @@ describe('Season Champion Service', () => {
     // Assert
     expect(result).toBeNull();
   });
-}); 
+});

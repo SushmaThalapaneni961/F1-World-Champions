@@ -10,11 +10,11 @@ export const connectTestDb = async () => {
       mongoServer = await MongoMemoryServer.create({
         instance: {
           port: 27018,
-          dbName: 'testdb'
+          dbName: 'testdb',
         },
         binary: {
-          version: '4.4.0'
-        }
+          version: '4.4.0',
+        },
       });
     }
     const mongoUri = mongoServer.getUri();
@@ -68,7 +68,7 @@ export const generateMockRace = (overrides: Partial<IRace> = {}): IRace => {
     circuit: {
       name: 'Test Circuit',
       locality: 'Test City',
-      country: 'Test Country'
+      country: 'Test Country',
     },
     winner: {
       driverId: 'test_driver',
@@ -77,8 +77,8 @@ export const generateMockRace = (overrides: Partial<IRace> = {}): IRace => {
       fullName: 'Test Driver',
       nationality: 'Test Nationality',
       laps: '50',
-      time: '1:30:00.000'
+      time: '1:30:00.000',
     },
-    ...overrides
+    ...overrides,
   };
-}; 
+};

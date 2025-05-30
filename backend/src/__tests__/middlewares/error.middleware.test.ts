@@ -25,7 +25,7 @@ describe('Error Handler Middleware', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       status: 'error',
       statusCode: 500,
-      message: 'Test error'
+      message: 'Test error',
     });
   });
 
@@ -42,7 +42,7 @@ describe('Error Handler Middleware', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       status: 'error',
       statusCode: 404,
-      message: 'Not Found'
+      message: 'Not Found',
     });
   });
 
@@ -59,7 +59,7 @@ describe('Error Handler Middleware', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       status: 'error',
       statusCode: 400,
-      message: 'Bad Request'
+      message: 'Bad Request',
     });
   });
 
@@ -75,7 +75,7 @@ describe('Error Handler Middleware', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       status: 'error',
       statusCode: 500,
-      message: 'Custom error object'
+      message: 'Custom error object',
     });
   });
 
@@ -91,7 +91,7 @@ describe('Error Handler Middleware', () => {
     expect(mockRes.json).toHaveBeenCalledWith({
       status: 'error',
       statusCode: 500,
-      message: 'Internal Server Error'
+      message: 'Internal Server Error',
     });
   });
-}); 
+});

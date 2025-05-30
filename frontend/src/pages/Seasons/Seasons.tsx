@@ -1,9 +1,14 @@
 import { useEffect } from 'react';
 import { useAtom } from 'jotai';
-import { errorAtom, fetchSeasonsAtom, loadingAtom, seasonsAtom } from '../../store/atoms/seasons.atom';
+import {
+  errorAtom,
+  fetchSeasonsAtom,
+  loadingAtom,
+  seasonsAtom,
+} from '../../store/atoms/seasons.atom';
 import './Seasons.scss';
 import { useNavigate } from 'react-router-dom';
-import { LoadingSpinner } from '../../components/LoadingSpinner/LoadingSpinner';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
 
 const Seasons = () => {
   const navigate = useNavigate();
@@ -14,10 +19,10 @@ const Seasons = () => {
   const [error] = useAtom(errorAtom);
 
   useEffect(() => {
-    if(!seasons?.length){
+    if (!seasons?.length) {
       fetchSeasons();
     }
-  }, [seasons]);
+  }, [seasons, fetchSeasons]);
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p className="status-msg error">Error: {error}</p>;
@@ -29,8 +34,10 @@ const Seasons = () => {
 
   return (
     <div className="seasons-wrapper">
-      <h1 className="page-title">F1 <span>World Champions</span></h1>
-      
+      <h1 className="page-title">
+        F1 <span>World Champions</span>
+      </h1>
+
       <table className="desktop-table">
         <thead>
           <tr>
@@ -41,8 +48,8 @@ const Seasons = () => {
         </thead>
         <tbody>
           {seasons?.map((season: any) => (
-            <tr 
-              key={season?.season} 
+            <tr
+              key={season?.season}
               onClick={() => handleSeasonClick(season?.season)}
               className={season?.isChampion ? 'champion-row' : ''}
             >
@@ -56,8 +63,8 @@ const Seasons = () => {
 
       <div className="mobile-cards">
         {seasons?.map((season: any) => (
-          <div 
-            key={season?.season} 
+          <div
+            key={season?.season}
             className={`card ${season?.isChampion ? 'champion-card' : ''}`}
             onClick={() => handleSeasonClick(season?.season)}
           >

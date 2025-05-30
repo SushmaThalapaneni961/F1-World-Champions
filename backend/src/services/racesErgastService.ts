@@ -20,29 +20,31 @@ export const fetchAndStoreRaceWinnersForSeason = async (season: string): Promise
     const racesData = await withRetry(() => fetchRaces(), 'fetch Race Winners');
 
     // Transform the data according to DB model
-    const processedRaces = racesData.map((race: any) => {
-      const winner = race.Results?.[0]?.Driver;
-      if (!winner) return null;
- 
-      return {
-        season: race.season,
-        round: race.round,
-        raceName: race.raceName,
-        date: race.date,
-        circuit: {
-          name: race.Circuit?.circuitName,
-          locality: race.Circuit?.Location?.locality,
-          country: race.Circuit?.Location?.country
-        },
-        winner: {
-          driverId: winner.driverId,
-          fullName: `${winner.givenName} ${winner.familyName}`,
-          nationality: winner.nationality,
-          laps: race?.Results?.[0]?.laps,
-          time: race?.Results?.[0]?.Time?.time,
-        }
-      };
-    }).filter(Boolean); // remove nulls if any race didn't have a winner
+    const processedRaces = racesData
+      .map((race: any) => {
+        const winner = race.Results?.[0]?.Driver;
+        if (!winner) return null;
+
+        return {
+          season: race.season,
+          round: race.round,
+          raceName: race.raceName,
+          date: race.date,
+          circuit: {
+            name: race.Circuit?.circuitName,
+            locality: race.Circuit?.Location?.locality,
+            country: race.Circuit?.Location?.country,
+          },
+          winner: {
+            driverId: winner.driverId,
+            fullName: `${winner.givenName} ${winner.familyName}`,
+            nationality: winner.nationality,
+            laps: race?.Results?.[0]?.laps,
+            time: race?.Results?.[0]?.Time?.time,
+          },
+        };
+      })
+      .filter(Boolean); // remove nulls if any race didn't have a winner
 
     // You can store it in the DB (this is an example, you might want to clean up data before saving)
     // Upsert logic to avoid duplicates
@@ -50,8 +52,8 @@ export const fetchAndStoreRaceWinnersForSeason = async (season: string): Promise
       updateOne: {
         filter: { season: race.season, round: race.round },
         update: { $set: race },
-        upsert: true
-      }
+        upsert: true,
+      },
     }));
 
     await Race.bulkWrite(bulkRaces);

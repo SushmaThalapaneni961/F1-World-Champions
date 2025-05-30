@@ -24,8 +24,8 @@ describe('Races Ergast Service', () => {
               circuitName: 'Bahrain International Circuit',
               Location: {
                 locality: 'Sakhir',
-                country: 'Bahrain'
-              }
+                country: 'Bahrain',
+              },
             },
             Results: [
               {
@@ -33,18 +33,18 @@ describe('Races Ergast Service', () => {
                   driverId: 'max_verstappen',
                   givenName: 'Max',
                   familyName: 'Verstappen',
-                  nationality: 'Dutch'
+                  nationality: 'Dutch',
                 },
                 laps: '57',
                 Time: {
-                  time: '1:33:56.736'
-                }
-              }
-            ]
-          }
-        ]
-      }
-    }
+                  time: '1:33:56.736',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
   };
 
   beforeEach(() => {
@@ -57,7 +57,7 @@ describe('Races Ergast Service', () => {
     (axios.get as jest.Mock).mockResolvedValueOnce({ data: mockRaceData });
     (Race.bulkWrite as jest.Mock).mockResolvedValue({
       modifiedCount: 1,
-      upsertedCount: 1
+      upsertedCount: 1,
     });
 
     // Act
@@ -78,20 +78,20 @@ describe('Races Ergast Service', () => {
               circuit: {
                 name: 'Bahrain International Circuit',
                 locality: 'Sakhir',
-                country: 'Bahrain'
+                country: 'Bahrain',
               },
               winner: {
                 driverId: 'max_verstappen',
                 fullName: 'Max Verstappen',
                 nationality: 'Dutch',
                 laps: '57',
-                time: '1:33:56.736'
-              }
-            }
+                time: '1:33:56.736',
+              },
+            },
           },
-          upsert: true
-        }
-      }
+          upsert: true,
+        },
+      },
     ]);
     expect(result).toHaveLength(1);
     expect(result[0].winner.fullName).toBe('Max Verstappen');
@@ -104,25 +104,25 @@ describe('Races Ergast Service', () => {
     (withRetry as jest.Mock).mockRejectedValue(error);
 
     // Act & Assert
-    await expect(racesErgastService.fetchAndStoreRaceWinnersForSeason('2023'))
-      .rejects
-      .toThrow('Network error');
+    await expect(racesErgastService.fetchAndStoreRaceWinnersForSeason('2023')).rejects.toThrow(
+      'Network error',
+    );
   });
 
   it('should handle missing data in API response', async () => {
     // Arrange
-    (axios.get as jest.Mock).mockResolvedValueOnce({ 
-      data: { 
-        MRData: { 
-          RaceTable: { 
-            Races: [] 
-          } 
-        } 
-      } 
+    (axios.get as jest.Mock).mockResolvedValueOnce({
+      data: {
+        MRData: {
+          RaceTable: {
+            Races: [],
+          },
+        },
+      },
     });
     (Race.bulkWrite as jest.Mock).mockResolvedValue({
       modifiedCount: 0,
-      upsertedCount: 0
+      upsertedCount: 0,
     });
 
     // Act
@@ -136,13 +136,11 @@ describe('Races Ergast Service', () => {
   it('should handle malformed API response', async () => {
     // Arrange
     (axios.get as jest.Mock).mockResolvedValueOnce({
-      data: { MRData: {} } // Missing RaceTable
+      data: { MRData: {} }, // Missing RaceTable
     });
 
     // Act & Assert
-    await expect(racesErgastService.fetchAndStoreRaceWinnersForSeason('2023'))
-      .rejects
-      .toThrow();
+    await expect(racesErgastService.fetchAndStoreRaceWinnersForSeason('2023')).rejects.toThrow();
   });
 
   it('should handle database errors', async () => {
@@ -152,9 +150,9 @@ describe('Races Ergast Service', () => {
     (Race.bulkWrite as jest.Mock).mockRejectedValue(dbError);
 
     // Act & Assert
-    await expect(racesErgastService.fetchAndStoreRaceWinnersForSeason('2023'))
-      .rejects
-      .toThrow('Database error');
+    await expect(racesErgastService.fetchAndStoreRaceWinnersForSeason('2023')).rejects.toThrow(
+      'Database error',
+    );
   });
 
   it('should handle missing winner data in API response', async () => {
@@ -172,20 +170,20 @@ describe('Races Ergast Service', () => {
                 circuitName: 'Bahrain International Circuit',
                 Location: {
                   locality: 'Sakhir',
-                  country: 'Bahrain'
-                }
+                  country: 'Bahrain',
+                },
               },
-              Results: [] // Empty results
-            }
-          ]
-        }
-      }
+              Results: [], // Empty results
+            },
+          ],
+        },
+      },
     };
 
     (axios.get as jest.Mock).mockResolvedValueOnce({ data: mockDataWithoutWinner });
     (Race.bulkWrite as jest.Mock).mockResolvedValue({
       modifiedCount: 0,
-      upsertedCount: 0
+      upsertedCount: 0,
     });
 
     // Act
@@ -213,24 +211,24 @@ describe('Races Ergast Service', () => {
                     driverId: 'max_verstappen',
                     givenName: 'Max',
                     familyName: 'Verstappen',
-                    nationality: 'Dutch'
+                    nationality: 'Dutch',
                   },
                   laps: '57',
                   Time: {
-                    time: '1:33:56.736'
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
+                    time: '1:33:56.736',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
     };
 
     (axios.get as jest.Mock).mockResolvedValueOnce({ data: mockDataWithoutCircuit });
     (Race.bulkWrite as jest.Mock).mockResolvedValue({
       modifiedCount: 1,
-      upsertedCount: 1
+      upsertedCount: 1,
     });
 
     // Act
@@ -241,7 +239,7 @@ describe('Races Ergast Service', () => {
     expect(result[0].circuit).toEqual({
       name: undefined,
       locality: undefined,
-      country: undefined
+      country: undefined,
     });
   });
 
@@ -260,8 +258,8 @@ describe('Races Ergast Service', () => {
                 circuitName: 'Bahrain International Circuit',
                 Location: {
                   locality: 'Sakhir',
-                  country: 'Bahrain'
-                }
+                  country: 'Bahrain',
+                },
               },
               Results: [
                 {
@@ -269,21 +267,21 @@ describe('Races Ergast Service', () => {
                     driverId: 'max_verstappen',
                     givenName: 'Max',
                     familyName: 'Verstappen',
-                    nationality: 'Dutch'
+                    nationality: 'Dutch',
                   },
-                  laps: '57'
-                }
-              ]
-            }
-          ]
-        }
-      }
+                  laps: '57',
+                },
+              ],
+            },
+          ],
+        },
+      },
     };
 
     (axios.get as jest.Mock).mockResolvedValueOnce({ data: mockDataWithoutTime });
     (Race.bulkWrite as jest.Mock).mockResolvedValue({
       modifiedCount: 1,
-      upsertedCount: 1
+      upsertedCount: 1,
     });
 
     // Act
@@ -297,14 +295,13 @@ describe('Races Ergast Service', () => {
   it('should retry failed API calls before succeeding', async () => {
     // Arrange
     let retryCount = 0;
-    const fetchRacesFn = jest.fn()
-      .mockImplementation(() => {
-        retryCount++;
-        if (retryCount < 3) {
-          return Promise.reject(new Error('Temporary failure'));
-        }
-        return Promise.resolve({ data: mockRaceData });
-      });
+    const fetchRacesFn = jest.fn().mockImplementation(() => {
+      retryCount++;
+      if (retryCount < 3) {
+        return Promise.reject(new Error('Temporary failure'));
+      }
+      return Promise.resolve({ data: mockRaceData });
+    });
 
     (axios.get as jest.Mock).mockImplementation(fetchRacesFn);
     (withRetry as jest.Mock).mockImplementation(async (fn) => {
@@ -318,10 +315,10 @@ describe('Races Ergast Service', () => {
         }
       }
     });
-    
+
     (Race.bulkWrite as jest.Mock).mockResolvedValue({
       modifiedCount: 1,
-      upsertedCount: 0
+      upsertedCount: 0,
     });
 
     // Act
@@ -348,8 +345,8 @@ describe('Races Ergast Service', () => {
                 circuitName: 'Bahrain International Circuit',
                 Location: {
                   locality: 'Sakhir',
-                  country: 'Bahrain'
-                }
+                  country: 'Bahrain',
+                },
               },
               Results: [
                 {
@@ -357,24 +354,24 @@ describe('Races Ergast Service', () => {
                     driverId: 'max_verstappen',
                     // Missing givenName
                     familyName: 'Verstappen',
-                    nationality: 'Dutch'
+                    nationality: 'Dutch',
                   },
                   laps: '57',
                   Time: {
-                    time: '1:33:56.736'
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      }
+                    time: '1:33:56.736',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
     };
 
     (axios.get as jest.Mock).mockResolvedValueOnce({ data: mockPartialData });
     (Race.bulkWrite as jest.Mock).mockResolvedValue({
       modifiedCount: 1,
-      upsertedCount: 0
+      upsertedCount: 0,
     });
 
     // Act
@@ -394,22 +391,24 @@ describe('Races Ergast Service', () => {
             mockRaceData.MRData.RaceTable.Races[0],
             {
               ...mockRaceData.MRData.RaceTable.Races[0],
-              round: '2'
-            }
-          ]
-        }
-      }
+              round: '2',
+            },
+          ],
+        },
+      },
     };
 
     (axios.get as jest.Mock).mockResolvedValueOnce({ data: mockMultipleRaces });
     (Race.bulkWrite as jest.Mock).mockResolvedValue({
       modifiedCount: 1,
       upsertedCount: 1,
-      writeErrors: [{
-        index: 1,
-        code: 11000,
-        errmsg: 'Duplicate key error'
-      }]
+      writeErrors: [
+        {
+          index: 1,
+          code: 11000,
+          errmsg: 'Duplicate key error',
+        },
+      ],
     });
 
     // Act
@@ -417,18 +416,20 @@ describe('Races Ergast Service', () => {
 
     // Assert
     expect(result).toHaveLength(2);
-    expect(Race.bulkWrite).toHaveBeenCalledWith(expect.arrayContaining([
-      expect.objectContaining({
-        updateOne: expect.objectContaining({
-          filter: { season: '2023', round: '1' }
-        })
-      }),
-      expect.objectContaining({
-        updateOne: expect.objectContaining({
-          filter: { season: '2023', round: '2' }
-        })
-      })
-    ]));
+    expect(Race.bulkWrite).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          updateOne: expect.objectContaining({
+            filter: { season: '2023', round: '1' },
+          }),
+        }),
+        expect.objectContaining({
+          updateOne: expect.objectContaining({
+            filter: { season: '2023', round: '2' },
+          }),
+        }),
+      ]),
+    );
   });
 
   it('should handle completely missing Results array', async () => {
@@ -446,20 +447,20 @@ describe('Races Ergast Service', () => {
                 circuitName: 'Bahrain International Circuit',
                 Location: {
                   locality: 'Sakhir',
-                  country: 'Bahrain'
-                }
-              }
+                  country: 'Bahrain',
+                },
+              },
               // Results array completely missing
-            }
-          ]
-        }
-      }
+            },
+          ],
+        },
+      },
     };
 
     (axios.get as jest.Mock).mockResolvedValueOnce({ data: mockNoResults });
     (Race.bulkWrite as jest.Mock).mockResolvedValue({
       modifiedCount: 0,
-      upsertedCount: 0
+      upsertedCount: 0,
     });
 
     // Act
@@ -469,4 +470,4 @@ describe('Races Ergast Service', () => {
     expect(result).toHaveLength(0);
     expect(Race.bulkWrite).toHaveBeenCalledWith([]);
   });
-}); 
+});

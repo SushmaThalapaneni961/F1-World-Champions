@@ -1,8 +1,13 @@
-import { useAtom } from "jotai";
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { errorAtom, fetchSeasonRaceWinnersAtom, loadingAtom, seasonRaceWinnersAtom } from "../../store/atoms/raceWinners.atom";
-import { LoadingSpinner } from "../../components/LoadingSpinner/LoadingSpinner";
+import { useAtom } from 'jotai';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import LoadingSpinner from '../../components/common/LoadingSpinner';
+import {
+  errorAtom,
+  fetchSeasonRaceWinnersAtom,
+  loadingAtom,
+  seasonRaceWinnersAtom,
+} from '../../store/atoms/raceWinners.atom';
 import './RaceWinners.scss';
 
 const RaceWinners = () => {
@@ -15,10 +20,10 @@ const RaceWinners = () => {
   const [error] = useAtom(errorAtom);
 
   useEffect(() => {
-    // if(!seasonRaceWinners?.length){
-    // }
-    fetchSeasonRaceWinners(season ?? "");
-  }, [season]);
+    if (season) {
+      fetchSeasonRaceWinners(season ?? '');
+    }
+  }, [season, fetchSeasonRaceWinners]);
 
   const handleBackClick = () => {
     navigate('/seasons');
@@ -26,7 +31,8 @@ const RaceWinners = () => {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <p className="status-msg error">Error: {error}</p>;
-  if (!seasonRaceWinners.length) return <p className="status-msg">No Race Winners found for this season.</p>;
+  if (!seasonRaceWinners.length)
+    return <p className="status-msg">No Race Winners found for this season.</p>;
 
   return (
     <div className="race-winners-wrapper">
@@ -35,8 +41,14 @@ const RaceWinners = () => {
           Season <span>{season}</span> Races
         </h1>
         <button className="back-button" onClick={handleBackClick}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7" />
           </svg>
           Back to Seasons
         </button>
@@ -55,7 +67,7 @@ const RaceWinners = () => {
         </thead>
         <tbody>
           {seasonRaceWinners?.map((raceWinner: any) => (
-            <tr 
+            <tr
               key={`${raceWinner?.season}-${raceWinner?.raceName}`}
               className={raceWinner?.winner?.isChampion ? 'winner-row' : ''}
             >
@@ -72,7 +84,7 @@ const RaceWinners = () => {
 
       <div className="mobile-cards">
         {seasonRaceWinners?.map((raceWinner: any) => (
-          <div 
+          <div
             key={`${raceWinner?.season}-${raceWinner?.raceName}`}
             className={`card ${raceWinner?.winner?.isChampion ? 'winner-card' : ''}`}
           >

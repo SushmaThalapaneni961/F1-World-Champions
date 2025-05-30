@@ -14,8 +14,8 @@ describe('Season Service', () => {
         givenName: 'Max',
         familyName: 'Verstappen',
         fullName: 'Max Verstappen',
-        nationality: 'Dutch'
-      }
+        nationality: 'Dutch',
+      },
     },
     {
       season: '2022',
@@ -24,9 +24,9 @@ describe('Season Service', () => {
         givenName: 'Max',
         familyName: 'Verstappen',
         fullName: 'Max Verstappen',
-        nationality: 'Dutch'
-      }
-    }
+        nationality: 'Dutch',
+      },
+    },
   ];
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('Season Service', () => {
       const sortMock = jest.fn().mockResolvedValue(mockSeasons);
       (Season.find as jest.Mock).mockImplementation(() => ({
         find: findMock,
-        sort: sortMock
+        sort: sortMock,
       }));
 
       // Act
@@ -58,7 +58,7 @@ describe('Season Service', () => {
       const sortMock = jest.fn().mockResolvedValue([]);
       (Season.find as jest.Mock).mockImplementation(() => ({
         find: findMock,
-        sort: sortMock
+        sort: sortMock,
       }));
 
       // Act
@@ -77,7 +77,7 @@ describe('Season Service', () => {
       const sortMock = jest.fn().mockRejectedValue(error);
       (Season.find as jest.Mock).mockImplementation(() => ({
         find: findMock,
-        sort: sortMock
+        sort: sortMock,
       }));
 
       // Act & Assert
@@ -88,18 +88,18 @@ describe('Season Service', () => {
       // Arrange
       const seasonsWithMissingChampion = [
         {
-          season: '2023'
+          season: '2023',
         },
         {
           season: '2022',
-          champion: null
-        }
+          champion: null,
+        },
       ];
       const findMock = jest.fn().mockReturnThis();
       const sortMock = jest.fn().mockResolvedValue(seasonsWithMissingChampion);
       (Season.find as jest.Mock).mockImplementation(() => ({
         find: findMock,
-        sort: sortMock
+        sort: sortMock,
       }));
 
       // Act
@@ -111,4 +111,4 @@ describe('Season Service', () => {
       expect(result).toEqual(seasonsWithMissingChampion);
     });
   });
-}); 
+});

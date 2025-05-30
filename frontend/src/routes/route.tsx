@@ -5,15 +5,11 @@ import Seasons from '../pages/Seasons/Seasons';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/seasons',
     element: <Layout />,
     children: [
       {
         path: '/',
-        element: <Seasons />,
-      },
-      {
-        path: 'seasons',
         element: <Seasons />,
       },
       {
@@ -23,5 +19,5 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-  
+
 export default router;

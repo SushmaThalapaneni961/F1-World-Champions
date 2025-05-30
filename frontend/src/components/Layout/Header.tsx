@@ -10,11 +10,13 @@ const Header = () => {
           <img src={f1Logo} alt="F1 World Champions" />
         </Link>
         <nav className="header__nav">
-          <Link to="/" className="header__nav-link">Home</Link>
+          <Link to="/" className="header__nav-link">
+            Home
+          </Link>
         </nav>
       </div>
     </header>
   );
 };
 
-export default Header; 
+export default Header;

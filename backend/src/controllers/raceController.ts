@@ -12,7 +12,7 @@ import { sendError, sendSuccess } from '../utils/response';
 export const getAllRaces = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { season } = req.params;
-    console.log(req.params, req, "req params")
+    console.log(req.params, req, 'req params');
     if (!season) {
       return sendError(res, 'Season/Year is required', 400);
     }

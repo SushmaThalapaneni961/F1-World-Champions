@@ -38,19 +38,19 @@ describe('Race Controller', () => {
             fullName: 'Lewis Hamilton',
             nationality: 'British',
             laps: '58',
-            time: '1:34:00.000'
-          }
-        })
+            time: '1:34:00.000',
+          },
+        }),
       ];
       const req = { params: { season: '2023' } } as unknown as Request;
       const res = mockResponse();
       const next = jest.fn() as NextFunction;
-      
+
       const cachedData = {
         status: 'success',
         statusCode: 200,
         message: 'Race winners for season 2023',
-        data: mockRaces
+        data: mockRaces,
       };
 
       (redisClient.get as jest.Mock).mockResolvedValue(JSON.stringify(cachedData));
@@ -64,7 +64,7 @@ describe('Race Controller', () => {
         status: 'success',
         statusCode: 200,
         data: mockRaces,
-        message: 'Race winners retrieved (cached)'
+        message: 'Race winners retrieved (cached)',
       });
       expect(raceService.getRacesBySeasonFromDb).not.toHaveBeenCalled();
     });
@@ -74,7 +74,7 @@ describe('Race Controller', () => {
       const req = { params: { season: '2023' } } as unknown as Request;
       const res = mockResponse();
       const next = jest.fn() as NextFunction;
-      
+
       (redisClient.get as jest.Mock).mockResolvedValue('invalid json');
 
       // Act
@@ -110,13 +110,13 @@ describe('Race Controller', () => {
       const req = { params: { season: '2023' } } as unknown as Request;
       const res = mockResponse();
       const next = jest.fn() as NextFunction;
-      
+
       const mockChampion: Champion = {
         driverId: 'max_verstappen',
         givenName: 'Max',
         familyName: 'Verstappen',
         fullName: 'Max Verstappen',
-        nationality: 'Dutch'
+        nationality: 'Dutch',
       };
 
       (redisClient.get as jest.Mock).mockResolvedValue(null);
@@ -135,7 +135,7 @@ describe('Race Controller', () => {
         status: 'success',
         statusCode: 200,
         data: expect.any(Array),
-        message: 'Race winners for season 2023'
+        message: 'Race winners for season 2023',
       });
     });
 
@@ -149,7 +149,9 @@ describe('Race Controller', () => {
       (redisClient.get as jest.Mock).mockResolvedValue(null);
       (seasonChampionService.getSeasonChampion as jest.Mock).mockResolvedValue(null);
       (raceService.getRacesBySeasonFromDb as jest.Mock).mockResolvedValue([]);
-      (racesErgastService.fetchAndStoreRaceWinnersForSeason as jest.Mock).mockResolvedValue(mockRaces);
+      (racesErgastService.fetchAndStoreRaceWinnersForSeason as jest.Mock).mockResolvedValue(
+        mockRaces,
+      );
       (redisClient.setEx as jest.Mock).mockResolvedValue('OK');
 
       // Act
@@ -167,7 +169,7 @@ describe('Race Controller', () => {
       const res = mockResponse();
       const next = jest.fn() as NextFunction;
       const error = new Error('Database error');
-      
+
       (redisClient.get as jest.Mock).mockRejectedValue(error);
 
       // Act
@@ -191,7 +193,7 @@ describe('Race Controller', () => {
       expect(res.json).toHaveBeenCalledWith({
         status: 'error',
         statusCode: 400,
-        message: 'Season/Year is required'
+        message: 'Season/Year is required',
       });
     });
 
@@ -215,4 +217,4 @@ describe('Race Controller', () => {
       expect(next).toHaveBeenCalledWith(error);
     });
   });
-}); 
+});

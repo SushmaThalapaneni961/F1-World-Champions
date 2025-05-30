@@ -27,8 +27,8 @@ describe('Season Controller', () => {
         givenName: 'Max',
         familyName: 'Verstappen',
         fullName: 'Max Verstappen',
-        nationality: 'Dutch'
-      }
+        nationality: 'Dutch',
+      },
     },
     {
       season: '2022',
@@ -37,9 +37,9 @@ describe('Season Controller', () => {
         givenName: 'Max',
         familyName: 'Verstappen',
         fullName: 'Max Verstappen',
-        nationality: 'Dutch'
-      }
-    }
+        nationality: 'Dutch',
+      },
+    },
   ];
 
   beforeEach(() => {
@@ -53,11 +53,11 @@ describe('Season Controller', () => {
         status: 'success',
         statusCode: 200,
         message: 'Seasons list',
-        data: mockSeasons.map(s => ({
+        data: mockSeasons.map((s) => ({
           season: s.season,
           championName: s.champion?.fullName,
-          nationality: s.champion?.nationality
-        }))
+          nationality: s.champion?.nationality,
+        })),
       };
       const req = {} as Request;
       const res = mockResponse();
@@ -75,7 +75,7 @@ describe('Season Controller', () => {
         status: 'success',
         statusCode: 200,
         message: 'Seasons retrieved (cached)',
-        data: cachedData.data
+        data: cachedData.data,
       });
       expect(seasonService.getAllSeasonsFromDb).not.toHaveBeenCalled();
     });
@@ -100,11 +100,11 @@ describe('Season Controller', () => {
         status: 'success',
         statusCode: 200,
         message: 'Seasons retrieved',
-        data: mockSeasons.map(s => ({
+        data: mockSeasons.map((s) => ({
           season: s.season,
           championName: s.champion?.fullName,
-          nationality: s.champion?.nationality
-        }))
+          nationality: s.champion?.nationality,
+        })),
       });
     });
 
@@ -116,7 +116,9 @@ describe('Season Controller', () => {
 
       (redisClient.get as jest.Mock).mockResolvedValue(null);
       (seasonService.getAllSeasonsFromDb as jest.Mock).mockResolvedValue([]);
-      (seasonsErgastService.fetchAndStoreSeasonsFromErgast as jest.Mock).mockResolvedValue(mockSeasons);
+      (seasonsErgastService.fetchAndStoreSeasonsFromErgast as jest.Mock).mockResolvedValue(
+        mockSeasons,
+      );
 
       // Act
       await seasonController.getAllSeasons(req, res, next);
@@ -129,11 +131,11 @@ describe('Season Controller', () => {
         status: 'success',
         statusCode: 200,
         message: 'Seasons retrieved',
-        data: mockSeasons.map(s => ({
+        data: mockSeasons.map((s) => ({
           season: s.season,
           championName: s.champion?.fullName,
-          nationality: s.champion?.nationality
-        }))
+          nationality: s.champion?.nationality,
+        })),
       });
     });
 
@@ -142,8 +144,8 @@ describe('Season Controller', () => {
       const seasonsWithoutChampion: ISeason[] = [
         {
           season: '2023',
-          champion: null
-        }
+          champion: null,
+        },
       ];
       const req = {} as Request;
       const res = mockResponse();
@@ -161,11 +163,13 @@ describe('Season Controller', () => {
         status: 'success',
         statusCode: 200,
         message: 'Seasons retrieved',
-        data: [{
-          season: '2023',
-          championName: null,
-          nationality: null
-        }]
+        data: [
+          {
+            season: '2023',
+            championName: null,
+            nationality: null,
+          },
+        ],
       });
     });
 
@@ -238,4 +242,4 @@ describe('Season Controller', () => {
       expect(next).toHaveBeenCalledWith(error);
     });
   });
-}); 
+});

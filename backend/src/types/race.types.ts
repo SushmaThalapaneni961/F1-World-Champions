@@ -1,10 +1,10 @@
-import { Champion } from "./season.types";
+import { Champion } from './season.types';
 
 export interface Circuit {
-    name?: string;
-    locality?: string;
-    country?: string;
-};
+  name?: string;
+  locality?: string;
+  country?: string;
+}
 
 export interface IRace {
   season: string;

@@ -10,11 +10,21 @@ const Footer = () => {
           © {currentYear} F1 World Champions. All rights reserved.
         </p>
         <div className="footer__links">
-          <a href="https://www.formula1.com" target="_blank" rel="noopener noreferrer" className="footer__link">
+          <a
+            href="https://www.formula1.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer__link"
+          >
             Official F1 Website
           </a>
           <span className="footer__separator">|</span>
-          <a href="https://www.fia.com" target="_blank" rel="noopener noreferrer" className="footer__link">
+          <a
+            href="https://www.fia.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer__link"
+          >
             FIA
           </a>
         </div>
@@ -23,4 +33,4 @@ const Footer = () => {
   );
 };
 
-export default Footer; 
+export default Footer;

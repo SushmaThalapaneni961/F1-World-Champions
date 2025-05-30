@@ -10,8 +10,8 @@ const RaceSchema: Schema = new Schema({
   date: { type: String, required: true },
   circuit: {
     name: String,
-    locality: String ,
-    country: String ,
+    locality: String,
+    country: String,
   },
   winner: {
     driverId: { type: String, required: true },

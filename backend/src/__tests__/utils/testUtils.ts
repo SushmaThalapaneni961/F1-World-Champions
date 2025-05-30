@@ -54,7 +54,7 @@ export const generateMockRace = (overrides = {}): IRace => ({
   circuit: {
     name: 'Test Circuit',
     locality: 'Test City',
-    country: 'Test Country'
+    country: 'Test Country',
   },
   winner: {
     driverId: 'test_driver',
@@ -63,7 +63,7 @@ export const generateMockRace = (overrides = {}): IRace => ({
     fullName: 'Test Driver',
     nationality: 'Test Nation',
     laps: '58',
-    time: '1:30:00.000'
+    time: '1:30:00.000',
   },
-  ...overrides
-}); 
+  ...overrides,
+});

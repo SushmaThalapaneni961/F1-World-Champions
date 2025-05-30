@@ -5,7 +5,7 @@ import {
   connectTestDb,
   disconnectTestDb,
   createMockModel,
-  generateMockRace
+  generateMockRace,
 } from '../../utils/testUtils';
 import { IRace } from '../../types/race.types';
 
@@ -63,12 +63,14 @@ describe('Test Utilities', () => {
       const originalConsoleError = console.error;
       console.error = jest.fn();
       const mockError = new Error('Test error');
-      
+
       // Mock the collections property to throw an error
       const originalCollections = mongoose.connection.collections;
       Object.defineProperty(mongoose.connection, 'collections', {
-        get: () => { throw mockError; },
-        configurable: true
+        get: () => {
+          throw mockError;
+        },
+        configurable: true,
       });
 
       // Act & Assert
@@ -78,7 +80,7 @@ describe('Test Utilities', () => {
       console.error = originalConsoleError;
       Object.defineProperty(mongoose.connection, 'collections', {
         value: originalCollections,
-        configurable: true
+        configurable: true,
       });
     });
   });
@@ -109,8 +111,8 @@ describe('Test Utilities', () => {
           fullName: 'Custom Driver',
           nationality: 'Custom Nationality',
           laps: '60',
-          time: '1:45:00.000'
-        }
+          time: '1:45:00.000',
+        },
       };
 
       // Act
@@ -122,4 +124,4 @@ describe('Test Utilities', () => {
       expect(mockRace.winner).toEqual(overrides.winner);
     });
   });
-}); 
+});

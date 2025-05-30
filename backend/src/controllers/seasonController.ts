@@ -10,7 +10,7 @@ import { sendSuccess } from '../utils/response';
 export const getAllSeasons = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const cached = await redisClient.get(CACHE_KEYS.SEASONS);
-    logger.info(`cahced, ${cached}`)
+    logger.info(`cahced, ${cached}`);
     //Check chached and return without making additional call
     if (cached) {
       logger.info('[CACHE HIT] Returning seasons from Redis');
@@ -26,7 +26,7 @@ export const getAllSeasons = async (req: Request, res: Response, next: NextFunct
     const data = seasons.map((s: any) => ({
       season: s.season,
       championName: s?.champion?.fullName ?? null,
-      nationality: s?.champion?.nationality ?? null
+      nationality: s?.champion?.nationality ?? null,
     }));
 
     const responseToCache = {
@@ -36,7 +36,11 @@ export const getAllSeasons = async (req: Request, res: Response, next: NextFunct
       data: data,
     };
 
-    await redisClient.setEx(CACHE_KEYS.SEASONS, CACHE_TTL.ONE_HOUR, JSON.stringify(responseToCache)); // Cache for 1 hour
+    await redisClient.setEx(
+      CACHE_KEYS.SEASONS,
+      CACHE_TTL.ONE_HOUR,
+      JSON.stringify(responseToCache),
+    ); // Cache for 1 hour
 
     return sendSuccess(res, data, 'Seasons retrieved');
   } catch (err) {

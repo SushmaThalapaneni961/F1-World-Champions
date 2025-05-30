@@ -1,7 +1,7 @@
-import apiClient from "../../lib/api/axiosSetup";
-import { handleApiError } from "../../lib/api/errorHandler";
-import type { ApiResponse } from "../models";
-import type { IRaceWinner } from "../types";
+import apiClient from '../../lib/api/axiosSetup';
+import { handleApiError } from '../../lib/api/errorHandler';
+import type { ApiResponse } from '../models';
+import type { IRaceWinner } from '../types';
 
 export const getRacesBySeason = async (season: string): Promise<IRaceWinner[]> => {
   try {

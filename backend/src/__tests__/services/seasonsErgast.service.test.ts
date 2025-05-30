@@ -15,7 +15,7 @@ jest.mock('../../services/seaonsErgastService', () => {
   const originalModule = jest.requireActual('../../services/seaonsErgastService');
   return {
     ...originalModule,
-    delay: jest.fn().mockResolvedValue(undefined)
+    delay: jest.fn().mockResolvedValue(undefined),
   };
 });
 
@@ -23,13 +23,9 @@ describe('Seasons Ergast Service', () => {
   const mockSeasonData = {
     MRData: {
       SeasonTable: {
-        Seasons: [
-          { season: '2023' },
-          { season: '2022' },
-          { season: '2021' }
-        ]
-      }
-    }
+        Seasons: [{ season: '2023' }, { season: '2022' }, { season: '2021' }],
+      },
+    },
   };
 
   const mockChampion: Champion = {
@@ -37,7 +33,7 @@ describe('Seasons Ergast Service', () => {
     givenName: 'Max',
     familyName: 'Verstappen',
     fullName: 'Max Verstappen',
-    nationality: 'Dutch'
+    nationality: 'Dutch',
   };
 
   beforeEach(() => {
@@ -52,7 +48,7 @@ describe('Seasons Ergast Service', () => {
     (Season.insertMany as jest.Mock).mockResolvedValue([
       { season: '2023', champion: mockChampion },
       { season: '2022', champion: mockChampion },
-      { season: '2021', champion: mockChampion }
+      { season: '2021', champion: mockChampion },
     ]);
 
     // Act
@@ -62,9 +58,9 @@ describe('Seasons Ergast Service', () => {
     expect(axios.get).toHaveBeenCalledWith(expect.stringContaining(ERGAST_ENDPOINTS.SEASONS));
     expect(seasonChampionService.getSeasonChampion).toHaveBeenCalledTimes(3);
     expect(Season.deleteMany).toHaveBeenCalled();
-    expect(Season.insertMany).toHaveBeenCalledWith(expect.arrayContaining([
-      expect.objectContaining({ season: '2023', champion: mockChampion })
-    ]));
+    expect(Season.insertMany).toHaveBeenCalledWith(
+      expect.arrayContaining([expect.objectContaining({ season: '2023', champion: mockChampion })]),
+    );
     expect(result).toHaveLength(3);
   });
 
@@ -74,21 +70,21 @@ describe('Seasons Ergast Service', () => {
     (axios.get as jest.Mock).mockRejectedValue(error);
 
     // Act & Assert
-    await expect(seasonsErgastService.fetchAndStoreSeasonsFromErgast())
-      .rejects
-      .toThrow('Failed to fetch seasons from external API');
+    await expect(seasonsErgastService.fetchAndStoreSeasonsFromErgast()).rejects.toThrow(
+      'Failed to fetch seasons from external API',
+    );
   });
 
   it('should handle missing data in API response', async () => {
     // Arrange
-    (axios.get as jest.Mock).mockResolvedValueOnce({ 
-      data: { 
-        MRData: { 
-          SeasonTable: { 
-            Seasons: [] 
-          } 
-        } 
-      } 
+    (axios.get as jest.Mock).mockResolvedValueOnce({
+      data: {
+        MRData: {
+          SeasonTable: {
+            Seasons: [],
+          },
+        },
+      },
     });
     (Season.deleteMany as jest.Mock).mockResolvedValue({});
     (Season.insertMany as jest.Mock).mockResolvedValue([]);
@@ -109,7 +105,7 @@ describe('Seasons Ergast Service', () => {
     (Season.insertMany as jest.Mock).mockResolvedValue([
       { season: '2023', champion: null },
       { season: '2022', champion: null },
-      { season: '2021', champion: null }
+      { season: '2021', champion: null },
     ]);
 
     // Act
@@ -119,4 +115,4 @@ describe('Seasons Ergast Service', () => {
     expect(result).toHaveLength(3);
     expect(result[0].champion).toBeNull();
   });
-}); 
+});

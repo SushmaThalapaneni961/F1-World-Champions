@@ -14,20 +14,23 @@ describe('External Constants', () => {
 
     it('should generate correct CHAMPION_BY_YEAR endpoint', () => {
       const season = '2023';
-      expect(ERGAST_ENDPOINTS.CHAMPION_BY_YEAR(season))
-        .toBe(`${ERGAST_API_BASE_URL}/${season}/driverStandings/1.json`);
+      expect(ERGAST_ENDPOINTS.CHAMPION_BY_YEAR(season)).toBe(
+        `${ERGAST_API_BASE_URL}/${season}/driverStandings/1.json`,
+      );
     });
 
     it('should generate correct RACE_BY_SEASONID endpoint', () => {
       const season = '2023';
-      expect(ERGAST_ENDPOINTS.RACE_BY_SEASONID(season))
-        .toBe(`${ERGAST_API_BASE_URL}/${season}/races.json`);
+      expect(ERGAST_ENDPOINTS.RACE_BY_SEASONID(season)).toBe(
+        `${ERGAST_API_BASE_URL}/${season}/races.json`,
+      );
     });
 
     it('should generate correct RACE_RESULTS_BY_SEASON endpoint', () => {
       const season = '2023';
-      expect(ERGAST_ENDPOINTS.RACE_RESULTS_BY_SEASON(season))
-        .toBe(`${ERGAST_API_BASE_URL}/${season}/results/1.json`);
+      expect(ERGAST_ENDPOINTS.RACE_RESULTS_BY_SEASON(season)).toBe(
+        `${ERGAST_API_BASE_URL}/${season}/results/1.json`,
+      );
     });
   });
 
@@ -37,4 +40,4 @@ describe('External Constants', () => {
       expect(RETRY_CONFIG.DELAY_MS).toBe(500);
     });
   });
-}); 
+});

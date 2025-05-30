@@ -6,7 +6,7 @@ const LoadingSpinner = ({ size = 'medium' }: LoadingSpinnerProps) => {
   const sizeClass = {
     small: 'loader--sm',
     medium: '',
-    large: 'loader--lg'
+    large: 'loader--lg',
   }[size];
 
   return (
@@ -17,4 +17,4 @@ const LoadingSpinner = ({ size = 'medium' }: LoadingSpinnerProps) => {
   );
 };
 
-export default LoadingSpinner; 
+export default LoadingSpinner;

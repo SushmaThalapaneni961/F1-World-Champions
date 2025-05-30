@@ -6,4 +6,3 @@ const router = express.Router({ mergeParams: true });
 router.get('/', getAllRaces);
 
 export default router;
-
