@@ -1,0 +1,68 @@
+graph TB
+    subgraph Docker Compose Environment
+        subgraph Application Containers
+            Frontend[Frontend Container<br/>Node.js + Vite<br/>Port: 5173]
+            Backend[Backend Container<br/>Node.js + Express<br/>Port: 5001]
+        end
+
+        subgraph Data Containers
+            MongoDB[(MongoDB Container<br/>Port: 27017<br/>Volume: mongo-data)]
+            Redis[(Redis Container<br/>Port: 6379)]
+        end
+
+        subgraph Management Containers
+            MongoExpress[Mongo Express<br/>Port: 8081]
+        end
+
+        subgraph Networking
+            AppNetwork[app-network<br/>bridge]
+        end
+
+        subgraph Volumes
+            MongoVolume[mongo-data<br/>Persistent Volume]
+        end
+    end
+
+    %% Container Dependencies
+    Frontend --> Backend
+    Backend --> MongoDB
+    Backend --> Redis
+    MongoExpress --> MongoDB
+    
+    %% Network Connections
+    Frontend --> AppNetwork
+    Backend --> AppNetwork
+    MongoDB --> AppNetwork
+    Redis --> AppNetwork
+    MongoExpress --> AppNetwork
+
+    %% Volume Mounts
+    MongoDB --> MongoVolume
+
+    %% External Access
+    Browser((Browser)) --> Frontend
+    Browser --> Backend
+    Browser --> MongoExpress
+
+    %% Environment Variables
+    EnvFile[(.env file)] --> Frontend
+    EnvFile --> Backend
+    EnvFile --> MongoExpress
+
+    %% Styling
+    classDef container fill:#2196F3,color:white
+    classDef database fill:#FFC107,color:black
+    classDef cache fill:#FF9800,color:white
+    classDef network fill:#4CAF50,color:white
+    classDef volume fill:#9C27B0,color:white
+    classDef external fill:#9E9E9E,color:white
+    classDef config fill:#607D8B,color:white
+
+    class Frontend,Backend container
+    class MongoDB database
+    class Redis cache
+    class AppNetwork network
+    class MongoVolume volume
+    class MongoExpress container
+    class Browser external
+    class EnvFile config 

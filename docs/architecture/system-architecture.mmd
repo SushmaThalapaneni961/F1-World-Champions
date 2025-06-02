@@ -1,0 +1,49 @@
+graph TB
+    subgraph Docker Environment
+        subgraph Frontend Container
+            React[React App<br/>Port: 5173]
+        end
+
+        subgraph Backend Container
+            Express[Express Server<br/>Port: 5001]
+            Swagger[Swagger UI<br/>/api-docs]
+        end
+
+        subgraph Data Layer
+            MongoDB[(MongoDB<br/>Port: 27017)]
+            Redis[(Redis Cache<br/>Port: 6379)]
+            MongoExpress[Mongo Express UI<br/>Port: 8081]
+        end
+
+        subgraph External
+            F1API[F1 External API]
+        end
+    end
+
+    %% Frontend interactions
+    User((User)) --> React
+    React --> |HTTP/REST| Express
+
+    %% Backend interactions
+    Express --> |Query| MongoDB
+    Express --> |Cache| Redis
+    Express --> |Fetch Data| F1API
+    
+    %% Management UIs
+    Admin((Admin)) --> MongoExpress
+    MongoExpress --> MongoDB
+
+    %% Styling
+    classDef frontend fill:#2196F3,color:white
+    classDef backend fill:#4CAF50,color:white
+    classDef database fill:#FFC107,color:black
+    classDef cache fill:#FF9800,color:white
+    classDef external fill:#9E9E9E,color:white
+    classDef user fill:#E91E63,color:white
+
+    class React frontend
+    class Express,Swagger backend
+    class MongoDB,MongoExpress database
+    class Redis cache
+    class F1API external
+    class User,Admin user 

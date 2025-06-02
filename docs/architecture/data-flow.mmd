@@ -1,0 +1,61 @@
+graph TB
+    subgraph User Interface
+        UI[User Interface]
+        Components[React Components]
+    end
+
+    subgraph State Management
+        Atoms[Jotai Atoms]
+        subgraph State Types
+            ChampionsState[Champions State]
+            RacesState[Races State]
+            UIState[UI State]
+        end
+    end
+
+    subgraph Frontend Services
+        APIClient[API Client]
+        ErrorHandler[Error Handler]
+    end
+
+    subgraph Backend Services
+        API[Express API]
+        Cache[Redis Cache]
+        DB[MongoDB]
+        F1API[External F1 API]
+    end
+
+    %% Frontend Data Flow
+    UI --> Components
+    Components --> Atoms
+    Atoms --> ChampionsState
+    Atoms --> RacesState
+    Atoms --> UIState
+    
+    ChampionsState --> APIClient
+    RacesState --> APIClient
+    APIClient --> ErrorHandler
+
+    %% Backend Data Flow
+    APIClient --> API
+    API --> Cache
+    Cache -->|Cache Miss| DB
+    DB -->|Not Found| F1API
+    F1API --> DB
+    DB --> Cache
+    Cache --> API
+    API --> APIClient
+    APIClient --> Atoms
+
+    %% Styling
+    classDef ui fill:#2196F3,color:white
+    classDef state fill:#4CAF50,color:white
+    classDef service fill:#FF9800,color:white
+    classDef backend fill:#9C27B0,color:white
+    classDef data fill:#FFC107,color:black
+
+    class UI,Components ui
+    class Atoms,ChampionsState,RacesState,UIState state
+    class APIClient,ErrorHandler service
+    class API,Cache backend
+    class DB,F1API data 

@@ -1,0 +1,58 @@
+graph TB
+    subgraph Client
+        Request[API Request]
+        Response[API Response]
+    end
+
+    subgraph Cache Strategy
+        CheckCache{Check Cache}
+        CacheHit{Cache Hit?}
+        UpdateCache[Update Cache]
+        ReturnCached[Return Cached Data]
+        FetchFresh[Fetch Fresh Data]
+    end
+
+    subgraph Cache Keys
+        ChampionsKey[champions:all<br/>TTL: 1h]
+        ChampionKey[champions:year:*<br/>TTL: 1h]
+        RacesKey[races:year:*<br/>TTL: 24h]
+        RaceKey[races:year:*:round:*<br/>TTL: 24h]
+    end
+
+    subgraph Data Sources
+        Redis[(Redis Cache)]
+        MongoDB[(MongoDB)]
+        F1API[F1 External API]
+    end
+
+    %% Flow
+    Request --> CheckCache
+    CheckCache --> CacheHit
+    CacheHit -->|Yes| ReturnCached
+    CacheHit -->|No| FetchFresh
+    FetchFresh --> MongoDB
+    MongoDB -->|Not Found| F1API
+    F1API --> UpdateCache
+    MongoDB -->|Found| UpdateCache
+    UpdateCache --> Redis
+    UpdateCache --> Response
+    ReturnCached --> Response
+
+    %% Cache Key Usage
+    Redis --> ChampionsKey
+    Redis --> ChampionKey
+    Redis --> RacesKey
+    Redis --> RaceKey
+
+    %% Styling
+    classDef client fill:#2196F3,color:white
+    classDef flow fill:#4CAF50,color:white
+    classDef cache fill:#FF9800,color:white
+    classDef data fill:#FFC107,color:black
+    classDef api fill:#9E9E9E,color:white
+
+    class Request,Response client
+    class CheckCache,CacheHit,UpdateCache,ReturnCached,FetchFresh flow
+    class ChampionsKey,ChampionKey,RacesKey,RaceKey cache
+    class Redis,MongoDB data
+    class F1API api 

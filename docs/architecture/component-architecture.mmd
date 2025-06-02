@@ -1,0 +1,88 @@
+graph TB
+    subgraph Frontend Architecture
+        subgraph UI Components
+            App[App Component]
+            Champions[Champions List]
+            RaceResults[Race Results]
+            Loading[Loading State]
+            ErrorBoundary[Error Boundary]
+        end
+
+        subgraph State Management
+            Atoms[Jotai Atoms]
+            ChampionsAtom[Champions Atom]
+            RacesAtom[Races Atom]
+            UIAtom[UI State Atom]
+        end
+
+        subgraph Services
+            APIService[API Service]
+            CacheService[Cache Service]
+        end
+    end
+
+    subgraph Backend Architecture
+        subgraph API Layer
+            Routes[Routes]
+            Middleware[Middleware]
+            Controllers[Controllers]
+            Validation[Request Validation]
+        end
+
+        subgraph Business Logic
+            ChampionsService[Champions Service]
+            RacesService[Races Service]
+            CacheManager[Cache Manager]
+        end
+
+        subgraph Data Layer
+            Models[Mongoose Models]
+            DBService[Database Service]
+            RedisService[Redis Service]
+        end
+    end
+
+    %% Frontend Relationships
+    App --> Champions
+    App --> RaceResults
+    App --> Loading
+    ErrorBoundary --> App
+    
+    Champions --> Atoms
+    RaceResults --> Atoms
+    Atoms --> ChampionsAtom
+    Atoms --> RacesAtom
+    Atoms --> UIAtom
+    
+    ChampionsAtom --> APIService
+    RacesAtom --> APIService
+    APIService --> CacheService
+
+    %% Backend Relationships
+    Routes --> Middleware
+    Middleware --> Controllers
+    Controllers --> Validation
+    
+    Controllers --> ChampionsService
+    Controllers --> RacesService
+    
+    ChampionsService --> CacheManager
+    RacesService --> CacheManager
+    
+    CacheManager --> RedisService
+    ChampionsService --> Models
+    RacesService --> Models
+    Models --> DBService
+
+    %% Styling
+    classDef component fill:#2196F3,color:white
+    classDef state fill:#4CAF50,color:white
+    classDef service fill:#FF9800,color:white
+    classDef api fill:#9C27B0,color:white
+    classDef data fill:#FFC107,color:black
+
+    class App,Champions,RaceResults,Loading,ErrorBoundary component
+    class Atoms,ChampionsAtom,RacesAtom,UIAtom state
+    class APIService,CacheService,ChampionsService,RacesService service
+    class Routes,Middleware,Controllers,Validation api
+    class Models,DBService,RedisService,CacheManager data 
