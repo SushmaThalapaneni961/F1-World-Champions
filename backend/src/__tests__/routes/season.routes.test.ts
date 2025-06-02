@@ -44,4 +44,4 @@ describe('Season Routes', () => {
       expect(response.status).toBe(500);
     });
   });
-}); 
+});

@@ -65,4 +65,4 @@ describe('Logger', () => {
     expect(console.error).toHaveBeenCalledWith(expect.stringContaining('undefined'));
     expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('undefined'));
   });
-}); 
+});

@@ -44,4 +44,4 @@ describe('Request Logger Middleware', () => {
     );
     expect(mockNext).toHaveBeenCalled();
   });
-}); 
+});

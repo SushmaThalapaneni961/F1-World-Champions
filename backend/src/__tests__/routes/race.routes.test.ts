@@ -44,4 +44,4 @@ describe('Race Routes', () => {
       expect(response.status).toBe(500);
     });
   });
-}); 
+});
