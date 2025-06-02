@@ -46,10 +46,12 @@ backend/
 ## API Endpoints
 
 ### Champions
+
 - `GET /api/champions` - Get all F1 World Champions
 - `GET /api/champions/:year` - Get World Champion for specific year
 
 ### Races
+
 - `GET /api/races/:year` - Get all races for a specific year
 - `GET /api/races/:year/:round` - Get specific race details
 
@@ -65,11 +67,13 @@ backend/
 ### Local Development
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Set up environment variables in `.env`:
+
 ```env
 PORT=5001
 MONGO_URI=mongodb://localhost:27017/f1
@@ -78,6 +82,7 @@ REDIS_PORT=6379
 ```
 
 3. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -122,11 +127,12 @@ docker compose up backend
 - Default credentials:
   - Username: admin
   - Password: pass
-  (Set these in your environment variables as MONGO_EXPRESS_USER and MONGO_EXPRESS_PASS)
+    (Set these in your environment variables as MONGO_EXPRESS_USER and MONGO_EXPRESS_PASS)
 
 ### Redis Cache Management
 
 To clear the Redis cache:
+
 ```bash
 # Using redis-cli
 redis-cli FLUSHALL
@@ -140,6 +146,7 @@ curl -X POST http://localhost:5001/api/cache/clear
 Swagger UI is available at: http://localhost:5001/api-docs
 
 Features documented:
+
 - All available endpoints
 - Request/response schemas
 - Authentication requirements
@@ -157,12 +164,14 @@ Features documented:
 ## Error Handling
 
 The API uses standard HTTP status codes:
+
 - 200: Success
 - 400: Bad Request
 - 404: Not Found
 - 500: Internal Server Error
 
 Error responses follow the format:
+
 ```json
 {
   "error": {
@@ -190,11 +199,13 @@ Error responses follow the format:
 ### Common Issues
 
 1. **MongoDB Connection Issues**
+
    - Check if MongoDB is running
    - Verify connection string in `.env`
    - Ensure network connectivity
 
 2. **Redis Connection Issues**
+
    - Check if Redis server is running
    - Verify Redis host and port
    - Check Redis connection logs

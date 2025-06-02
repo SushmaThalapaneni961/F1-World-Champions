@@ -51,11 +51,13 @@ frontend/
 ### Local Development
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -112,6 +114,7 @@ docker compose up frontend
 ## Code Style and Linting
 
 The project uses:
+
 - ESLint for code linting
 - Prettier for code formatting
 - TypeScript strict mode
@@ -120,6 +123,7 @@ The project uses:
 ## Browser Support
 
 The application supports:
+
 - Chrome (latest)
 - Firefox (latest)
 - Safari (latest)
@@ -130,10 +134,12 @@ The application supports:
 ### Common Issues
 
 1. **"Module not found" errors**
+
    - Run `npm install` to ensure all dependencies are installed
    - Check if `.env` file exists with correct variables
 
 2. **Development server won't start**
+
    - Check if port 5173 is available
    - Ensure Node.js version is 18.17 or higher
 

@@ -53,7 +53,7 @@ jobs:
 
     - name: Test frontend
       working-directory: frontend
-      run: npm run test -- --watch=false --ci
+      run: npm run test
 
     - name: Test frontend with coverage
       working-directory: frontend
