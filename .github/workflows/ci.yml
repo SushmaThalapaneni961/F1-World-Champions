@@ -1,7 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI/CD Pipeline
-
+name: CI
 
 # Controls when the workflow will run
 on:
@@ -29,26 +28,10 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      
-      redis:
-        image: redis:7
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libssl1.1
-        sudo apt-get install -y openssl
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -56,14 +39,6 @@ jobs:
         node-version: '18'
 
     # ---------- FRONTEND ----------
-    - name: Cache frontend dependencies
-      uses: actions/cache@v3
-      with:
-        path: frontend/node_modules
-        key: frontend-deps-${{ hashFiles('frontend/package-lock.json') }}
-        restore-keys: |
-          frontend-deps-
-
     - name: Install frontend dependencies
       working-directory: frontend
       run: npm ci
@@ -84,29 +59,11 @@ jobs:
       working-directory: frontend
       run: npm run test:coverage
 
-    - name: Upload frontend coverage
-      uses: softprops/action-gh-release@v1
-      if: github.ref == 'refs/heads/main'
-      with:
-        files: frontend/coverage/**/*
-        name: frontend-coverage-${{ github.sha }}
-        tag_name: frontend-coverage-${{ github.sha }}
-        draft: false
-        prerelease: false
-
     - name: Build frontend
       working-directory: frontend
       run: npm run build
 
     # ---------- BACKEND ----------
-    - name: Cache backend dependencies
-      uses: actions/cache@v3
-      with:
-        path: backend/node_modules
-        key: backend-deps-${{ hashFiles('backend/package-lock.json') }}
-        restore-keys: |
-          backend-deps-
-
     - name: Install backend dependencies
       working-directory: backend
       run: npm ci
@@ -119,19 +76,7 @@ jobs:
       working-directory: backend
       env:
         MONGO_URL: mongodb://localhost:27017/testdb
-        NODE_ENV: test
-        CI: true
       run: npm run test:coverage
-
-    - name: Upload backend coverage
-      uses: softprops/action-gh-release@v1
-      if: github.ref == 'refs/heads/main'
-      with:
-        files: backend/coverage/**/*
-        name: backend-coverage-${{ github.sha }}
-        tag_name: backend-coverage-${{ github.sha }}
-        draft: false
-        prerelease: false
 
     - name: Build backend
       working-directory: backend
