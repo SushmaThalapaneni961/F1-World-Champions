@@ -22,11 +22,11 @@ export const connectTestDb = async () => {
       mongoServer = await MongoMemoryServer.create({
         instance: {
           port: 27019,
-          dbName: 'f1_test'
+          dbName: 'f1_test',
         },
         binary: {
-          version: '6.0.12'
-        }
+          version: '6.0.12',
+        },
       });
     }
     const mongoUri = mongoServer.getUri();

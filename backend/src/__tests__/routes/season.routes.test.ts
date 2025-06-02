@@ -3,7 +3,6 @@ import request from 'supertest';
 import seasonRoutes from '../../routes/season.routes';
 import * as seasonController from '../../controllers/seasonController';
 import { errorHandler } from '../../middlewares/errorHandler';
-import redisClient from '../../config/redis';
 
 jest.mock('../../controllers/seasonController');
 jest.mock('../../config/redis', () => ({
@@ -12,8 +11,8 @@ jest.mock('../../config/redis', () => ({
     on: jest.fn(),
     connect: jest.fn().mockResolvedValue(undefined),
     get: jest.fn().mockResolvedValue(null),
-    setEx: jest.fn().mockResolvedValue('OK')
-  }
+    setEx: jest.fn().mockResolvedValue('OK'),
+  },
 }));
 
 describe('Season Routes', () => {
@@ -30,22 +29,18 @@ describe('Season Routes', () => {
   describe('GET /api/seasons', () => {
     it('should route to getAllSeasons controller', async () => {
       // Arrange
-      const mockResponse = { 
+      const mockResponse = {
         status: 'success',
-        data: [
-          { season: '2023', champion: { fullName: 'Max Verstappen' } }
-        ]
+        data: [{ season: '2023', champion: { fullName: 'Max Verstappen' } }],
       };
-      
+
       const mockGetAllSeasons = seasonController.getAllSeasons as jest.Mock;
       mockGetAllSeasons.mockImplementation((req, res) => {
         res.json(mockResponse);
       });
 
       // Act
-      const response = await request(app)
-        .get('/api/seasons')
-        .expect('Content-Type', /json/);
+      const response = await request(app).get('/api/seasons').expect('Content-Type', /json/);
 
       // Assert
       expect(mockGetAllSeasons).toHaveBeenCalled();
@@ -61,9 +56,7 @@ describe('Season Routes', () => {
       });
 
       // Act
-      const response = await request(app)
-        .get('/api/seasons')
-        .expect('Content-Type', /json/);
+      const response = await request(app).get('/api/seasons').expect('Content-Type', /json/);
 
       // Assert
       expect(mockGetAllSeasons).toHaveBeenCalled();
@@ -71,7 +64,7 @@ describe('Season Routes', () => {
       expect(response.body).toEqual({
         status: 'error',
         message: 'Test error',
-        statusCode: 500
+        statusCode: 500,
       });
     });
   });

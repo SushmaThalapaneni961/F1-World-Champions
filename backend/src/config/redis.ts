@@ -18,7 +18,9 @@ export const connectRedis = async () => {
     await withRetry(() => redisClient.connect(), 'Redis connection');
     logger.info('Redis connected successfully');
   } catch (error) {
-    logger.warn(`Redis connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    logger.warn(
+      `Redis connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    );
   }
 };
 
