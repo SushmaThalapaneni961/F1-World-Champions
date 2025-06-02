@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, NextFunction } from 'express';
 import { mockResponse, generateMockRace } from '../utils/testUtils';
 import * as raceService from '../../services/raceService';
 import * as racesErgastService from '../../services/racesErgastService';
@@ -6,7 +6,6 @@ import * as seasonChampionService from '../../services/seasonChampionService';
 import * as raceController from '../../controllers/raceController';
 import redisClient from '../../config/redis';
 import { Champion } from '../../types/season.types';
-import { IRace } from '../../types/race.types';
 
 // Mock the services
 jest.mock('../../services/raceService');

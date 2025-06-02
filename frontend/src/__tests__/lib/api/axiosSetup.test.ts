@@ -3,11 +3,8 @@ import axios, {
   AxiosInstance,
   InternalAxiosRequestConfig,
   AxiosResponse,
-  AxiosError,
-  AxiosRequestConfig,
 } from 'axios';
 import { StaticDomainApi } from '../../../lib/api/helperApi';
-import { APIError } from '../../../lib/api/errorHandler';
 import { isNetworkError, getErrorDetails } from '../../../utils/errorHandling';
 
 // Mock errorHandling utilities
@@ -42,9 +39,7 @@ const mockAxiosInstance = {
 
 describe('Axios Setup', () => {
   let axiosInstance: AxiosInstance;
-  let requestSuccessCallback: any;
   let requestErrorCallback: any;
-  let responseSuccessCallback: any;
   let responseErrorCallback: any;
 
   beforeEach(async () => {
@@ -62,14 +57,14 @@ describe('Axios Setup', () => {
     });
 
     // Set up interceptor capture
-    mockRequestUse.mockImplementation((onFulfilled, onRejected) => {
-      requestSuccessCallback = onFulfilled;
+    mockRequestUse.mockImplementation((_onFulfilled, onRejected) => {
+      // Store both callbacks for testing
       requestErrorCallback = onRejected;
       return mockAxiosInstance;
     });
 
-    mockResponseUse.mockImplementation((onFulfilled, onRejected) => {
-      responseSuccessCallback = onFulfilled;
+    mockResponseUse.mockImplementation((_onFulfilled, onRejected) => {
+      // Store both callbacks for testing
       responseErrorCallback = onRejected;
       return mockAxiosInstance;
     });
@@ -110,9 +105,6 @@ describe('Axios Setup', () => {
 
   describe('Request Interceptor', () => {
     it('passes through config in request interceptor', async () => {
-      const mockConfig = {
-        headers: { 'Content-Type': 'application/json' },
-      } as InternalAxiosRequestConfig;
       await axiosInstance.get('/test');
       expect(mockGet).toHaveBeenCalled();
     });

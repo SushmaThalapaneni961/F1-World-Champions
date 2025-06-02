@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import Race from '../../models/race.model';
 import * as raceService from '../../services/raceService';
 import { generateMockRace } from '../utils/testUtils';

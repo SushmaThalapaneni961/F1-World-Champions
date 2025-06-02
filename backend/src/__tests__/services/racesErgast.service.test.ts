@@ -2,7 +2,6 @@ import axios from 'axios';
 import { ERGAST_ENDPOINTS } from '../../constants/external';
 import Race from '../../models/race.model';
 import * as racesErgastService from '../../services/racesErgastService';
-import { IRace } from '../../types/race.types';
 import { withRetry } from '../../utils/retry';
 
 jest.mock('axios');

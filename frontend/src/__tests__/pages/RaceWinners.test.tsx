@@ -10,7 +10,6 @@ import {
   errorAtom,
   fetchSeasonRaceWinnersAtom,
 } from '../../store/atoms/raceWinners.atom';
-import userEvent from '@testing-library/user-event';
 
 // Mock dependencies
 vi.mock('react-router-dom', () => ({

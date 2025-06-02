@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import redisClient from '../config/redis';
 import { CACHE_KEYS, CACHE_TTL } from '../constants/cache';
-import { RETRY_CONFIG } from '../constants/external';
 import { fetchAndStoreRaceWinnersForSeason } from '../services/racesErgastService';
 import { getRacesBySeasonFromDb } from '../services/raceService';
 import { getSeasonChampion } from '../services/seasonChampionService';
