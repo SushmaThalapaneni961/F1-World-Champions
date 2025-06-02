@@ -2,7 +2,7 @@ import { logger } from '../../utils/logger';
 
 describe('Logger', () => {
   const originalConsole = { ...console };
-  
+
   beforeEach(() => {
     console.log = jest.fn();
   });
