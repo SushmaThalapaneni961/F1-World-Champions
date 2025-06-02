@@ -1,14 +1,16 @@
 import { logger } from '../../utils/logger';
 
 describe('Logger', () => {
-  const originalConsole = { ...console };
+  let mockConsoleLog: jest.SpyInstance;
 
   beforeEach(() => {
-    console.log = jest.fn();
+    // Create a spy on console.log
+    mockConsoleLog = jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    console.log = originalConsole.log;
+    // Restore the original console.log and clear all mocks
+    mockConsoleLog.mockRestore();
     jest.clearAllMocks();
   });
 
@@ -20,8 +22,9 @@ describe('Logger', () => {
     logger.info(mockMessage);
 
     // Assert
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining(mockMessage));
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('[INFO]'));
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[INFO\]: Test message/)
+    );
   });
 
   it('should log error messages', () => {
@@ -32,8 +35,9 @@ describe('Logger', () => {
     logger.error(mockError);
 
     // Assert
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining(mockError));
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'));
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[ERROR\]: Test error/)
+    );
   });
 
   it('should log warning messages', () => {
@@ -44,8 +48,9 @@ describe('Logger', () => {
     logger.warn(mockWarning);
 
     // Assert
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining(mockWarning));
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('[WARN]'));
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[WARN\]: Test warning/)
+    );
   });
 
   it('should handle Error objects in error log', () => {
@@ -56,15 +61,18 @@ describe('Logger', () => {
     logger.error(mockError);
 
     // Assert
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Test error'));
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'));
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[ERROR\]: Test error/)
+    );
   });
 
   it('should handle undefined messages', () => {
     // Arrange & Act
-    logger.info(undefined as any);
+    logger.info(undefined);
 
     // Assert
-    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('undefined'));
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[INFO\]: undefined/)
+    );
   });
 });
