@@ -15,6 +15,13 @@ jest.mock('../../config/redis', () => ({
   get: jest.fn(),
   setEx: jest.fn(),
 }));
+jest.mock('../../utils/logger', () => ({
+  logger: {
+    error: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn(),
+  },
+}));
 
 describe('Race Controller', () => {
   // Reset all mocks after each test

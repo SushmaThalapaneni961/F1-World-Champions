@@ -1,6 +1,16 @@
 import { Request, Response, NextFunction } from 'express';
 import { errorHandler } from '../../middlewares/errorHandler';
 import { mockResponse } from '../utils/testUtils';
+import { logger } from '../../utils/logger';
+
+// Mock logger
+jest.mock('../../utils/logger', () => ({
+  logger: {
+    error: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn(),
+  },
+}));
 
 describe('Error Handler Middleware', () => {
   let mockReq: Partial<Request>;
@@ -11,6 +21,7 @@ describe('Error Handler Middleware', () => {
     mockReq = {};
     mockRes = mockResponse();
     mockNext = jest.fn();
+    jest.clearAllMocks();
   });
 
   it('should handle standard Error objects', () => {
@@ -21,6 +32,7 @@ describe('Error Handler Middleware', () => {
     errorHandler(error, mockReq as Request, mockRes, mockNext);
 
     // Assert
+    expect(logger.error).toHaveBeenCalled();
     expect(mockRes.status).toHaveBeenCalledWith(500);
     expect(mockRes.json).toHaveBeenCalledWith({
       status: 'error',
@@ -38,6 +50,7 @@ describe('Error Handler Middleware', () => {
     errorHandler(error, mockReq as Request, mockRes, mockNext);
 
     // Assert
+    expect(logger.error).toHaveBeenCalled();
     expect(mockRes.status).toHaveBeenCalledWith(404);
     expect(mockRes.json).toHaveBeenCalledWith({
       status: 'error',
@@ -55,6 +68,7 @@ describe('Error Handler Middleware', () => {
     errorHandler(error, mockReq as Request, mockRes, mockNext);
 
     // Assert
+    expect(logger.error).toHaveBeenCalled();
     expect(mockRes.status).toHaveBeenCalledWith(400);
     expect(mockRes.json).toHaveBeenCalledWith({
       status: 'error',
@@ -71,6 +85,7 @@ describe('Error Handler Middleware', () => {
     errorHandler(error as Error, mockReq as Request, mockRes, mockNext);
 
     // Assert
+    expect(logger.error).toHaveBeenCalled();
     expect(mockRes.status).toHaveBeenCalledWith(500);
     expect(mockRes.json).toHaveBeenCalledWith({
       status: 'error',
@@ -87,6 +102,7 @@ describe('Error Handler Middleware', () => {
     errorHandler(error as Error, mockReq as Request, mockRes, mockNext);
 
     // Assert
+    expect(logger.error).toHaveBeenCalled();
     expect(mockRes.status).toHaveBeenCalledWith(500);
     expect(mockRes.json).toHaveBeenCalledWith({
       status: 'error',
