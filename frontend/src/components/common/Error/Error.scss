@@ -1,0 +1,136 @@
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  padding: 2rem;
+  text-align: center;
+
+  .error-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: 400px;
+    padding: 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease-out;
+
+    .error-icon {
+      width: 48px;
+      height: 48px;
+      animation: pulse 2s infinite;
+
+      &.empty {
+        color: #6c757d;
+        animation: none;
+      }
+    }
+
+    .error-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      .error-message {
+        margin: 0;
+        font-size: 1.1rem;
+        color: #4a4a4a;
+        line-height: 1.5;
+      }
+
+      .error-details {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #6c757d;
+        line-height: 1.4;
+      }
+    }
+
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+
+      .error-action {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &.primary {
+          background-color: #1a73e8;
+          color: white;
+
+          &:hover {
+            background-color: #1557b0;
+          }
+        }
+
+        &.secondary {
+          background-color: #f8f9fa;
+          color: #1a73e8;
+          border: 1px solid #1a73e8;
+
+          &:hover {
+            background-color: #e8f0fe;
+          }
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+
+  // Error type specific styles
+  &.network .error-icon {
+    color: #dc3545;
+  }
+
+  &.timeout .error-icon {
+    color: #ffc107;
+  }
+
+  &.empty .error-icon {
+    color: #6c757d;
+    animation: none;
+  }
+
+  &.api .error-icon {
+    color: #dc3545;
+  }
+
+  &.unknown .error-icon {
+    color: #dc3545;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+} 

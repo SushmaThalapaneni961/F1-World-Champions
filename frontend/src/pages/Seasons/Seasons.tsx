@@ -1,83 +1,115 @@
-import { useEffect } from 'react';
-import { useAtom } from 'jotai';
-import {
-  errorAtom,
-  fetchSeasonsAtom,
-  loadingAtom,
-  seasonsAtom,
-} from '../../store/atoms/seasons.atom';
-import './Seasons.scss';
+import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
+import { useAtom } from 'jotai';
+
+import { fetchSeasonsAtom, seasonsAtom, loadingAtom, errorAtom } from '../../store/atoms/seasons.atom';
+import { useSort } from '../../hooks/useSort';
+import type { ISeason } from '../../store/types/season.types';
+import './Seasons.scss';
+import { Error, Column, LoadingSpinner, Table, Card } from '../../components/common';
+import { useEffect } from 'react';
 
 const Seasons = () => {
   const navigate = useNavigate();
-
   const [, fetchSeasons] = useAtom(fetchSeasonsAtom);
   const [seasons] = useAtom(seasonsAtom);
   const [loading] = useAtom(loadingAtom);
   const [error] = useAtom(errorAtom);
 
+  const { items: sortedSeasons, sortConfig, requestSort } = useSort<ISeason>(
+    seasons,
+    { key: 'season', direction: 'desc' } // Default sort by season in descending order
+  );
+
   useEffect(() => {
+    console.log('seasons', seasons);
     if (!seasons?.length) {
       fetchSeasons();
     }
   }, [seasons, fetchSeasons]);
 
-  if (loading) return <LoadingSpinner />;
-  if (error) return <p className="status-msg error">Error: {error}</p>;
-  if (!seasons.length) return <p className="status-msg">No seasons found.</p>;
-
-  const handleSeasonClick = (season: string) => {
-    navigate(`/racewinners/${season}`);
+  const handleRetry = () => {
+    fetchSeasons();
   };
 
+  const handleSeasonClick = (season: ISeason) => {
+    navigate(`/racewinners/${season.season}`);
+  };
+
+  if (loading) return <LoadingSpinner />;
+  if (error) return (
+    <Error
+      message={error}
+      action={{
+        label: 'Retry',
+        onClick: handleRetry
+      }}
+    />
+  );
+  if (!seasons || !seasons.length) return (
+    <Error
+      message="No seasons found."
+      action={{
+        label: 'Retry',
+        onClick: handleRetry
+      }}
+    />
+  );
+
+  const columns: Column<ISeason>[] = [
+    { 
+      header: 'Season',
+      accessor: 'season',
+      render: (row) => row.season
+    },
+    { 
+      header: 'Champion',
+      accessor: 'championName',
+      render: (row) => row.championName || '-'
+    },
+    { 
+      header: 'Nationality',
+      accessor: 'nationality',
+      render: (row) => row.nationality || '-'
+    }
+  ];
+
+  const renderMobileCards = () => (
+    <div className="mobile-cards" data-testid="mobile-view">
+      {sortedSeasons.map((season) => (
+        <Card
+          key={season.season}
+          title={`F1 Season ${season.season}`}
+          className={season.championName ? 'champion-card' : ''}
+          onClick={() => handleSeasonClick(season)}
+          infoRows={[
+            {
+              label: 'World Champion',
+              value: season.championName || 'Not available'
+            },
+            {
+              label: 'Nationality', 
+              value: season.nationality || 'Not available'
+            }
+          ]}
+        />
+      ))}
+    </div>
+  );
+
   return (
-    <div className="seasons-wrapper">
-      <h1 className="page-title">
-        F1 <span>World Champions</span>
-      </h1>
-
-      <table className="desktop-table">
-        <thead>
-          <tr>
-            <th>Season</th>
-            <th>Champion</th>
-            <th>Nationality</th>
-          </tr>
-        </thead>
-        <tbody>
-          {seasons?.map((season: any) => (
-            <tr
-              key={season?.season}
-              onClick={() => handleSeasonClick(season?.season)}
-              className={season?.isChampion ? 'champion-row' : ''}
-            >
-              <td>{season?.season}</td>
-              <td className="champion-name">{season?.championName}</td>
-              <td>{season?.nationality}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="mobile-cards">
-        {seasons?.map((season: any) => (
-          <div
-            key={season?.season}
-            className={`card ${season?.isChampion ? 'champion-card' : ''}`}
-            onClick={() => handleSeasonClick(season?.season)}
-          >
-            <h3>{season?.season}</h3>
-            <div className="champion-info">
-              <div className="label">Champion</div>
-              <div className="value">{season?.championName}</div>
-              <div className="label">Nationality</div>
-              <div className="value">{season?.nationality}</div>
-            </div>
-          </div>
-        ))}
+    <div className="seasons-container animate-fade-in">
+      <h1><span className='f1-color'><b>F1</b></span> World Champions</h1>
+      <div className="desktop-view">
+        <Table<ISeason>
+          columns={columns}
+          data={sortedSeasons}
+          onRowClick={handleSeasonClick}
+          sortConfig={sortConfig}
+          onSort={requestSort}
+        />
       </div>
+      {renderMobileCards()}
     </div>
   );
 };

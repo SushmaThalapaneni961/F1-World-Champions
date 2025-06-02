@@ -1,15 +1,19 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
 import Layout from '../components/Layout/Layout';
 import RaceWinners from '../pages/RaceWinners/RaceWinners';
 import Seasons from '../pages/Seasons/Seasons';
 
 const router = createBrowserRouter([
   {
-    path: '/seasons',
+    path: '/',
     element: <Layout />,
     children: [
       {
-        path: '/',
+        index: true,
+        element: <Navigate to="/seasons" replace />,
+      },
+      {
+        path: 'seasons',
         element: <Seasons />,
       },
       {
@@ -19,5 +23,5 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
+  
 export default router;

@@ -8,8 +8,8 @@ interface Winner {
   driverId: string;
   fullName: string;
   nationality: string;
-  laps: Date | string;
-  time: Circuit;
+  laps: string;
+  time: string;
 }
 
 export interface IRaceWinner {

@@ -15,6 +15,15 @@
   }
 
   &__logo {
+    position: relative;
+    z-index: $z-index-header + 2;
+    
+    &--animated {
+      opacity: 0;
+      animation: fadeIn 0.3s ease-out forwards;
+      animation-delay: 1.9s;
+    }
+
     img {
       height: 40px;
       width: auto;
@@ -28,6 +37,9 @@
   &__nav {
     display: flex;
     gap: $spacing-md;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+    animation-delay: 2s;
   }
 
   &__nav-link {

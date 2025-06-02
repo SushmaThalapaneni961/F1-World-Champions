@@ -4,4 +4,28 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.test.ts'],
   moduleFileExtensions: ['ts', 'js'],
   roots: ['<rootDir>/src'],
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  coverageReporters: ['text', 'lcov', 'json', 'html'],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80
+    }
+  },
+  collectCoverageFrom: [
+    'src/**/*.{ts,js}',
+    '!src/**/*.d.ts',
+    '!src/__tests__/**',
+    '!src/types/**',
+    '!src/constants/**',
+    '!src/config/**',
+    '!src/**/index.ts',
+    '!src/app.ts',
+    '!src/server.ts'
+  ],
+  verbose: true,
+  testTimeout: 30000
 };

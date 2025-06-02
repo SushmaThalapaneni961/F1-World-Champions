@@ -12,7 +12,6 @@ import { sendError, sendSuccess } from '../utils/response';
 export const getAllRaces = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { season } = req.params;
-    console.log(req.params, req, 'req params');
     if (!season) {
       return sendError(res, 'Season/Year is required', 400);
     }
@@ -36,8 +35,8 @@ export const getAllRaces = async (req: Request, res: Response, next: NextFunctio
     }
 
     // 3. Mark if the race winner is the champion
-    const raceData = races.map((race) => {
-      const plain = race.toObject ? race.toObject() : race;
+    const raceData = races.map((race: any) => {
+      const plain = race?.toObject ? race.toObject() : race;
       return {
         ...plain,
         isChampionWinner: plain.winner?.fullName === championName,

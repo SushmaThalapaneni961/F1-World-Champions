@@ -1,4 +1,5 @@
 @import '../../styles/variables';
+@import '../../styles/animations';
 
 .container {
   padding: 1rem;
@@ -53,69 +54,181 @@
   }
 }
 
-.desktop-table {
-  display: none;
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: white;
-  border-radius: $border-radius-lg;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.seasons-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 
-  @media (min-width: $breakpoint-md) {
-    display: table;
-  }
+  h1 {
+    margin: 0 0 2rem;
+    font-size: 2rem;
+    color: $secondary-color;
+    text-align: center;
+    animation: slideInFromLeft 0.5s ease-out;
 
-  thead {
-    background-color: $secondary-color;
-    color: white;
-
-    th {
-      padding: $spacing-md;
-      font-weight: 600;
-      text-align: left;
-      font-size: 1.1rem;
+    .f1-color {
+      color: $primary-color;
     }
   }
 
-  tbody {
-    tr {
-      cursor: pointer;
-      transition: background-color $transition-fast;
+  .desktop-view {
+    display: none;
+    animation: slideUp 0.5s ease-out 0.2s forwards;
+    opacity: 0;
 
-      &:nth-child(even) {
-        background-color: $gray-light;
+    @media (min-width: $breakpoint-md) {
+      display: block;
+    }
+
+    .table-container {
+      background: white;
+      border-radius: $border-radius-lg;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+
+      tr {
+        transition: all 0.3s ease;
+
+        &:hover {
+          background-color: rgba($primary-color, 0.05);
+        }
+
+        td {
+          .champion-name {
+            color: $primary-color;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+
+  .mobile-cards {
+    display: none;
+    gap: 1rem;
+    padding: 0.5rem;
+
+    @media (max-width: #{$breakpoint-md - 1}) {
+      display: grid;
+    }
+
+    .card {
+      animation: slideUp 0.5s ease-out forwards;
+      opacity: 0;
+
+      @for $i from 1 through 10 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{$i * 0.1}s;
+        }
       }
 
-      &:hover {
-        background-color: rgba($primary-color, 0.05);
-      }
+      &.champion-card {
+        border-left: 4px solid $primary-color;
+        background: linear-gradient(to right, rgba($primary-color, 0.05), rgba($primary-color, 0.02));
 
-      &.champion-row {
-        background-color: rgba($accent-color, 0.1);
-      }
-
-      td {
-        padding: $spacing-md;
-        border-bottom: 1px solid $gray-medium;
-
-        &.champion-name {
-          font-weight: 600;
+        .champion-name {
           color: $primary-color;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-md) {
+    padding: 1rem;
+
+    h1 {
+      margin: 0 0 1.5rem;
+      font-size: 1.75rem;
+    }
+  }
+}
+
+// Desktop view
+.desktop-view {
+  display: none;
+
+  @media (min-width: $breakpoint-md) {
+    display: block;
+  }
+
+  .table-container {
+    background: white;
+    border-radius: $border-radius-lg;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid $gray-light;
+
+        &:first-child {
+          padding-left: 1.5rem;
+        }
+
+        &:last-child {
+          padding-right: 1.5rem;
+        }
+      }
+
+      th {
+        background-color: $secondary-color;
+        color: white;
+        font-weight: 600;
+        white-space: nowrap;
+
+        &.sortable {
+          cursor: pointer;
+          user-select: none;
+          transition: background-color 0.2s;
+
+          &:hover {
+            background-color: darken($secondary-color, 5%);
+          }
+
+          .sort-icon {
+            margin-left: 0.5rem;
+            opacity: 0.8;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background-color: rgba($primary-color, 0.05);
+            transform: translateY(-1px);
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
+
+          &:last-child td {
+            border-bottom: none;
+          }
         }
       }
     }
   }
 }
 
+// Mobile view
 .mobile-cards {
-  display: grid;
-  gap: $spacing-md;
-  padding: $spacing-md;
+  display: none;
 
-  @media (min-width: $breakpoint-md) {
-    display: none;
+  @media (max-width: #{$breakpoint-md - 1}) {
+    display: grid;
+    gap: 1rem;
+    padding: 0.5rem;
   }
 
   .card {
@@ -123,40 +236,57 @@
     border-radius: $border-radius-lg;
     padding: $spacing-lg;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition:
-      transform $transition-fast,
-      box-shadow $transition-fast;
     cursor: pointer;
+    transition: all 0.3s ease;
 
     &:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
 
+    &:active {
+      transform: translateY(0);
+    }
+
     &.champion-card {
       border-left: 4px solid $primary-color;
+      background: linear-gradient(to right, rgba($primary-color, 0.05), rgba($primary-color, 0.02));
+
+      .card-title {
+        color: darken($primary-color, 5%);
+      }
     }
 
-    h3 {
-      font-size: 1.5rem;
-      color: $primary-color;
+    .card-title {
+      font-size: 1.25rem;
+      color: $secondary-color;
       margin-bottom: $spacing-sm;
+      font-weight: 600;
     }
 
-    .champion-info {
+    .card-info {
+      display: grid;
+      gap: $spacing-sm;
       margin-top: $spacing-md;
       padding-top: $spacing-md;
       border-top: 1px solid $gray-light;
 
-      .label {
-        font-size: 0.9rem;
-        color: $gray-medium;
-        margin-bottom: $spacing-xs;
-      }
+      .info-row {
+        .label {
+          font-size: 0.9rem;
+          color: $gray-medium;
+          margin-bottom: $spacing-xs;
+        }
 
-      .value {
-        font-weight: 600;
-        color: $secondary-color;
+        .value {
+          font-weight: 500;
+          color: $text-color;
+
+          &.champion-name {
+            color: $primary-color;
+            font-weight: 600;
+          }
+        }
       }
     }
   }

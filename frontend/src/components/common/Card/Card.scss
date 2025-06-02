@@ -1,0 +1,51 @@
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .card-title {
+    font-size: 1.5rem;
+    color: #1a73e8;
+    margin: 0 0 1rem 0;
+  }
+
+  .card-info {
+    display: grid;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+
+    .info-row {
+      .label {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 0.25rem;
+      }
+
+      .value {
+        font-weight: 600;
+        color: #333;
+
+        &.winner-name {
+          color: #1a73e8;
+        }
+
+        &.race-time {
+          font-family: monospace;
+        }
+      }
+    }
+  }
+
+  &.winner-card {
+    border-left: 4px solid #1a73e8;
+  }
+} 

@@ -25,7 +25,8 @@ export const fetchAndStoreSeasonsFromErgast = async (): Promise<ISeason[]> => {
 
     for (const s of seasons) {
       const year = s.season;
-      let champion: Champion | null = (await getSeasonChampion(year)) ?? null;
+      let champion: Champion | null = await getSeasonChampion(year) ?? null;
+      logger.info(`Champion from getSeasonChampion: ${champion}`);
       results.push({
         season: year,
         champion,

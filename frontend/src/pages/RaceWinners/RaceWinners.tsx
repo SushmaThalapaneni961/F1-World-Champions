@@ -1,119 +1,153 @@
+import * as React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
-import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import LoadingSpinner from '../../components/common/LoadingSpinner';
-import {
-  errorAtom,
-  fetchSeasonRaceWinnersAtom,
-  loadingAtom,
-  seasonRaceWinnersAtom,
-} from '../../store/atoms/raceWinners.atom';
+
+import { fetchSeasonRaceWinnersAtom, seasonRaceWinnersAtom, loadingAtom, errorAtom } from '../../store/atoms/raceWinners.atom';
+import { useSort } from '../../hooks/useSort';
+import type { IRaceWinner } from '../../store/types/raceWinners.types';
 import './RaceWinners.scss';
+import { Button, Error, LoadingSpinner, Table, Card, Column } from '../../components/common';
+import { ArrowLeft } from '../../components/common/Icons/Icons';
 
 const RaceWinners = () => {
   const { season } = useParams<{ season: string }>();
   const navigate = useNavigate();
-
-  const [, fetchSeasonRaceWinners] = useAtom(fetchSeasonRaceWinnersAtom);
-  const [seasonRaceWinners] = useAtom(seasonRaceWinnersAtom);
+  const [, fetchRaceWinners] = useAtom(fetchSeasonRaceWinnersAtom);
+  const [raceWinners] = useAtom(seasonRaceWinnersAtom);
   const [loading] = useAtom(loadingAtom);
   const [error] = useAtom(errorAtom);
 
-  useEffect(() => {
-    if (season) {
-      fetchSeasonRaceWinners(season ?? '');
-    }
-  }, [season, fetchSeasonRaceWinners]);
+  const { items: sortedRaces, sortConfig, requestSort } = useSort<IRaceWinner>(
+    raceWinners,
+    { key: 'date', direction: 'asc' } // Default sort by date in ascending order
+  );
 
-  const handleBackClick = () => {
+  React.useEffect(() => {
+    if (season) {
+      fetchRaceWinners(season);
+    }
+  }, [season, fetchRaceWinners]);
+
+  const handleRetry = () => {
+    if (season) {
+      fetchRaceWinners(season);
+    }
+  };
+
+  const handleBack = () => {
     navigate('/seasons');
   };
 
   if (loading) return <LoadingSpinner />;
-  if (error) return <p className="status-msg error">Error: {error}</p>;
-  if (!seasonRaceWinners.length)
-    return <p className="status-msg">No Race Winners found for this season.</p>;
+  if (error) return (
+    <Error
+      message={error}
+      action={{
+        label: 'Retry',
+        onClick: handleRetry
+      }}
+    />
+  );
+  if (!raceWinners || !raceWinners.length) return (
+    <Error
+      message={`No race winners found for season ${season}.`}
+      action={{
+        label: 'Retry',
+        onClick: handleRetry
+      }}
+    />
+  );
+
+  const columns: Column<IRaceWinner>[] = [
+    { 
+      header: 'Round',
+      accessor: 'round',
+      render: (row: { round: any; }) => String(row.round)
+    },
+    { 
+      header: 'Race Name',
+      accessor: 'raceName',
+      render: (row: { raceName: any; }) => row.raceName
+    },
+    { 
+      header: 'Date',
+      accessor: 'date',
+      render: (row: { date: string | number | Date; }) => new Date(row.date).toLocaleDateString()
+    },
+    { 
+      header: 'Circuit',
+      accessor: 'circuit',
+      render: (row: { circuit: { name: any; }; }) => String(row.circuit?.name || '-')
+    },
+    { 
+      header: 'Winner',
+      accessor: 'winnerName',
+      render: (row: { winner: { fullName: any; }; }) => String(row.winner?.fullName || '-')
+    },
+    { 
+      header: 'Time',
+      accessor: 'winnerTime',
+      render: (row: { winner: { time: any; }; }) => String(row.winner?.time || '-')
+    }
+  ];
+
+  const renderMobileCards = () => (
+    <div className="mobile-cards">
+      {sortedRaces.map((race, index) => (
+        <Card
+          key={index}
+          title={race.raceName}
+          className={race.isChampionWinner ? 'winner-card' : ''}
+          infoRows={[
+            {
+              label: 'Round',
+              value: String(race.round)
+            },
+            {
+              label: 'Date',
+              value: new Date(race.date).toLocaleDateString()
+            },
+            {
+              label: 'Circuit',
+              value: race.circuit?.name ? String(race.circuit.name) : '-'
+            },
+            {
+              label: 'Winner',
+              value: race.winner?.fullName ? String(race.winner.fullName) : '-'
+            },
+            {
+              label: 'Time',
+              value: race.winner?.time ? String(race.winner.time) : '-'
+            }
+          ]}
+        />
+      ))}
+    </div>
+  );
 
   return (
-    <div className="race-winners-wrapper">
+    <div className="race-winners-container">
       <div className="page-header">
-        <h1 className="page-title">
-          Season <span>{season}</span> Races
-        </h1>
-        <button className="back-button" onClick={handleBackClick}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-          >
-            <path d="M19 12H5M12 19l-7-7 7-7" />
-          </svg>
+        <h1>Race Winners - Season <span className="season-number"><b>{season}</b></span></h1>
+        <Button
+          variant="secondary"
+          onClick={handleBack}
+          icon={<ArrowLeft size={20} />}
+          iconPosition="left"
+        >
           Back to Seasons
-        </button>
+        </Button>
       </div>
-
-      <table className="desktop-table">
-        <thead>
-          <tr>
-            <th>Grand Prix</th>
-            <th>Winner</th>
-            <th>Nationality</th>
-            <th>Laps</th>
-            <th>Time</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {seasonRaceWinners?.map((raceWinner: any) => (
-            <tr
-              key={`${raceWinner?.season}-${raceWinner?.raceName}`}
-              className={raceWinner?.winner?.isChampion ? 'winner-row' : ''}
-            >
-              <td>{raceWinner?.raceName}</td>
-              <td className="winner-name">{raceWinner?.winner?.fullName}</td>
-              <td>{raceWinner?.winner?.nationality}</td>
-              <td>{raceWinner?.winner?.laps}</td>
-              <td className="race-time">{raceWinner?.winner?.time}</td>
-              <td>{raceWinner?.date}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <div className="mobile-cards">
-        {seasonRaceWinners?.map((raceWinner: any) => (
-          <div
-            key={`${raceWinner?.season}-${raceWinner?.raceName}`}
-            className={`card ${raceWinner?.winner?.isChampion ? 'winner-card' : ''}`}
-          >
-            <h3 className="race-name">{raceWinner?.raceName}</h3>
-            <div className="race-info">
-              <div className="info-row">
-                <div className="label">Winner</div>
-                <div className="value winner-name">{raceWinner?.winner?.fullName}</div>
-              </div>
-              <div className="info-row">
-                <div className="label">Nationality</div>
-                <div className="value">{raceWinner?.winner?.nationality}</div>
-              </div>
-              <div className="info-row">
-                <div className="label">Laps</div>
-                <div className="value">{raceWinner?.winner?.laps}</div>
-              </div>
-              <div className="info-row">
-                <div className="label">Time</div>
-                <div className="value race-time">{raceWinner?.winner?.time}</div>
-              </div>
-              <div className="info-row">
-                <div className="label">Date</div>
-                <div className="value">{raceWinner?.date}</div>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="desktop-view">
+        <Table<IRaceWinner>
+          columns={columns}
+          data={sortedRaces}
+          sortConfig={sortConfig}
+          onSort={requestSort}
+          rowClassName={(row) => row.isChampionWinner ? 'champion-winner' : ''}
+        />
       </div>
+      {renderMobileCards()}
     </div>
   );
 };
