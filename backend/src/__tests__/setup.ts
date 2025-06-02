@@ -7,8 +7,8 @@ export default async function globalSetup() {
       version: '6.0.12',
       downloadDir: './.cache/mongodb-binaries',
       platform: process.platform,
-      arch: process.arch
+      arch: process.arch,
     },
   });
   await mongoServer.stop();
-} 
+}

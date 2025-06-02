@@ -16,7 +16,7 @@ export const connectTestDb = async () => {
           version: '6.0.12',
           downloadDir: './.cache/mongodb-binaries',
           platform: process.platform,
-          arch: process.arch
+          arch: process.arch,
         },
       });
     }
