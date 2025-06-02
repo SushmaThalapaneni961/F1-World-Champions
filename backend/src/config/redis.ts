@@ -13,7 +13,7 @@ redisClient.on('error', (err) => {
   logger.warn(`Redis Client Error: ${err.message}`);
 });
 
-export const connectRedis = async () => {
+const connectRedis = async () => {
   try {
     await withRetry(() => redisClient.connect(), 'Redis connection');
     logger.info('Redis connected successfully');
@@ -23,5 +23,7 @@ export const connectRedis = async () => {
     );
   }
 };
+
+connectRedis();
 
 export default redisClient;
