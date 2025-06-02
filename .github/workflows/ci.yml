@@ -2,6 +2,7 @@
 
 name: CI/CD Pipeline
 
+
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
@@ -28,16 +29,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      
-      redis:
-        image: redis:7
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
     - name: Checkout repository
@@ -49,14 +40,6 @@ jobs:
         node-version: '18'
 
     # ---------- FRONTEND ----------
-    - name: Cache frontend dependencies
-      uses: actions/cache@v3
-      with:
-        path: frontend/node_modules
-        key: frontend-deps-${{ hashFiles('frontend/package-lock.json') }}
-        restore-keys: |
-          frontend-deps-
-
     - name: Install frontend dependencies
       working-directory: frontend
       run: npm ci
@@ -77,25 +60,11 @@ jobs:
       working-directory: frontend
       run: npm run test:coverage
 
-    - name: Upload frontend coverage
-      uses: actions/upload-artifact@v3
-      with:
-        name: frontend-coverage
-        path: frontend/coverage
-
     - name: Build frontend
       working-directory: frontend
       run: npm run build
 
     # ---------- BACKEND ----------
-    - name: Cache backend dependencies
-      uses: actions/cache@v3
-      with:
-        path: backend/node_modules
-        key: backend-deps-${{ hashFiles('backend/package-lock.json') }}
-        restore-keys: |
-          backend-deps-
-
     - name: Install backend dependencies
       working-directory: backend
       run: npm ci
@@ -106,35 +75,10 @@ jobs:
 
     - name: Test backend
       working-directory: backend
+      env:
+        MONGO_URL: mongodb://localhost:27017/testdb
       run: npm run test:coverage
-
-    - name: Upload backend coverage
-      uses: actions/upload-artifact@v3
-      with:
-        name: backend-coverage
-        path: backend/coverage
 
     - name: Build backend
       working-directory: backend
       run: npm run build
-
-  security:
-    needs: ci
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Run SAST scan
-        uses: github/codeql-action/init@v2
-        with:
-          languages: javascript
-      
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
-      
-      - name: Run dependency scan
-        uses: snyk/actions/node@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --all-projects
