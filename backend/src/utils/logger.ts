@@ -1,21 +1,18 @@
-const log = (level: 'info' | 'warn' | 'error', message: string) => {
+const getFormattedMessage = (message: string, level: string) => {
   const timestamp = new Date().toISOString();
-  const formattedMessage = `[${timestamp}] [${level.toUpperCase()}]: ${message}`;
-  switch (level) {
-    case 'info':
-      console.info(formattedMessage);
-      break;
-    case 'warn':
-      console.warn(formattedMessage);
-      break;
-    case 'error':
-      console.error(formattedMessage);
-      break;
-  }
+  return `[${timestamp}] [${level.toUpperCase()}]: ${message}`;
+};
+
+const log = (level: 'info' | 'warn' | 'error', message: string) => {
+  const formattedMessage = getFormattedMessage(message, level);
+  console.log(formattedMessage);
 };
 
 export const logger = {
-  info: (msg: string) => log('info', msg),
-  warn: (msg: string) => log('warn', msg),
-  error: (msg: string) => log('error', msg),
+  info: (message: string) => log('info', message),
+  warn: (message: string) => log('warn', message),
+  error: (message: string | Error) => {
+    const errorMessage = message instanceof Error ? message.message : message;
+    log('error', errorMessage);
+  },
 };

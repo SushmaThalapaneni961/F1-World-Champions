@@ -2,67 +2,69 @@ import { logger } from '../../utils/logger';
 
 describe('Logger', () => {
   const originalConsole = { ...console };
-  const mockMessage = 'Test message';
-  const mockError = new Error('Test error');
-
+  
   beforeEach(() => {
     console.log = jest.fn();
-    console.error = jest.fn();
-    console.warn = jest.fn();
-    console.info = jest.fn();
   });
 
   afterEach(() => {
     console.log = originalConsole.log;
-    console.error = originalConsole.error;
-    console.warn = originalConsole.warn;
-    console.info = originalConsole.info;
+    jest.clearAllMocks();
   });
 
   it('should log info messages', () => {
+    // Arrange
+    const mockMessage = 'Test message';
+
     // Act
     logger.info(mockMessage);
 
     // Assert
-    expect(console.info).toHaveBeenCalledWith(expect.stringContaining(mockMessage));
+    expect(console.log).toHaveBeenCalledWith(expect.stringContaining(mockMessage));
+    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('[INFO]'));
   });
 
   it('should log error messages', () => {
+    // Arrange
+    const mockError = 'Test error';
+
     // Act
-    logger.error(mockError.message);
+    logger.error(mockError);
 
     // Assert
-    expect(console.error).toHaveBeenCalledWith(expect.stringContaining(mockError.message));
+    expect(console.log).toHaveBeenCalledWith(expect.stringContaining(mockError));
+    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'));
   });
 
   it('should log warning messages', () => {
+    // Arrange
+    const mockWarning = 'Test warning';
+
     // Act
-    logger.warn(mockMessage);
+    logger.warn(mockWarning);
 
     // Assert
-    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining(mockMessage));
+    expect(console.log).toHaveBeenCalledWith(expect.stringContaining(mockWarning));
+    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('[WARN]'));
   });
 
-  it('should handle non-Error objects in error log', () => {
+  it('should handle Error objects in error log', () => {
     // Arrange
-    const errorMessage = 'Custom error object';
+    const mockError = new Error('Test error');
 
     // Act
-    logger.error(errorMessage);
+    logger.error(mockError);
 
     // Assert
-    expect(console.error).toHaveBeenCalledWith(expect.stringContaining(errorMessage));
+    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Test error'));
+    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('[ERROR]'));
   });
 
   it('should handle undefined messages', () => {
-    // Act
-    logger.info('undefined');
-    logger.error('undefined');
-    logger.warn('undefined');
+    // Arrange & Act
+    logger.info(undefined as any);
 
     // Assert
-    expect(console.info).toHaveBeenCalledWith(expect.stringContaining('undefined'));
-    expect(console.error).toHaveBeenCalledWith(expect.stringContaining('undefined'));
-    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('undefined'));
+    expect(console.log).toHaveBeenCalledWith(expect.stringContaining('undefined'));
   });
 });
