@@ -5,7 +5,6 @@ const getFormattedMessage = (message: string, level: string) => {
 
 const log = (level: 'info' | 'warn' | 'error', message: string) => {
   const formattedMessage = getFormattedMessage(message, level);
-  console.log(formattedMessage);
 };
 
 export const logger = {
