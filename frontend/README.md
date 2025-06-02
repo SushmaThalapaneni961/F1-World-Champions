@@ -1,13 +1,13 @@
 # F1 World Champions Frontend
 
-This is the frontend application for the F1 World Champions project, built with React, TypeScript, and Material-UI.
+This is the frontend application for the F1 World Champions project, built with React and TypeScript.
 
 ## Tech Stack
 
 - **React 18+**: Modern UI library for building user interfaces
 - **TypeScript**: For type-safe code and better developer experience
 - **Jotai**: Atomic state management solution
-- **Material-UI (MUI)**: Component library for consistent and beautiful UI
+- **SCSS**: For styling with variables, mixins, and modular CSS
 - **Vite**: Next-generation frontend build tool
 - **Vitest**: Unit testing framework
 - **React Router**: For client-side routing
@@ -20,7 +20,7 @@ This is the frontend application for the F1 World Champions project, built with 
 - Detailed view of race winners for each season
 - Highlighted races where the winner became that year's world champion
 - Error handling and loading states
-- Dark/Light theme support
+- Custom UI components with SCSS styling
 - Cached API responses for better performance
 
 ## Project Structure

@@ -3,6 +3,7 @@ import { ERGAST_ENDPOINTS } from '../../constants/external';
 import Race from '../../models/race.model';
 import * as racesErgastService from '../../services/racesErgastService';
 import { withRetry } from '../../utils/retry';
+import { connectTestDb, disconnectTestDb, clearTestDb } from '../utils/testUtils';
 
 jest.mock('axios');
 jest.mock('../../models/race.model');
@@ -10,6 +11,20 @@ jest.mock('../../utils/logger');
 jest.mock('../../utils/retry');
 
 describe('Races Ergast Service', () => {
+  beforeAll(async () => {
+    await connectTestDb();
+  });
+
+  afterAll(async () => {
+    await disconnectTestDb();
+  });
+
+  beforeEach(async () => {
+    await clearTestDb();
+    jest.clearAllMocks();
+    (withRetry as jest.Mock).mockImplementation(async (fn) => fn());
+  });
+
   const mockRaceData = {
     MRData: {
       RaceTable: {
@@ -45,11 +60,6 @@ describe('Races Ergast Service', () => {
       },
     },
   };
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    (withRetry as jest.Mock).mockImplementation(async (fn) => fn());
-  });
 
   it('should fetch and store race winners successfully', async () => {
     // Arrange
@@ -467,6 +477,29 @@ describe('Races Ergast Service', () => {
 
     // Assert
     expect(result).toHaveLength(0);
+    expect(Race.bulkWrite).toHaveBeenCalledWith([]);
+  });
+
+  it('should handle missing Races property in API response', async () => {
+    // Arrange
+    const mockResponse = {
+      data: {
+        MRData: {
+          RaceTable: {
+            // No Races property
+          },
+        },
+      },
+    };
+
+    (axios.get as jest.Mock).mockResolvedValueOnce(mockResponse);
+    (Race.bulkWrite as jest.Mock).mockResolvedValueOnce({ ok: 1 });
+
+    // Act
+    const result = await racesErgastService.fetchAndStoreRaceWinnersForSeason('2023');
+
+    // Assert
+    expect(result).toEqual([]);
     expect(Race.bulkWrite).toHaveBeenCalledWith([]);
   });
 });

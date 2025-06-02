@@ -4,10 +4,12 @@ import Season from '../../models/season.model';
 import * as seasonsErgastService from '../../services/seaonsErgastService';
 import * as seasonChampionService from '../../services/seasonChampionService';
 import { Champion } from '../../types/season.types';
+import { withRetry } from '../../utils/retry';
 
 jest.mock('axios');
 jest.mock('../../models/season.model');
 jest.mock('../../services/seasonChampionService');
+jest.mock('../../utils/retry');
 jest.mock('../../utils/logger');
 
 // Mock the delay function
@@ -38,6 +40,7 @@ describe('Seasons Ergast Service', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    (withRetry as jest.Mock).mockImplementation(async (fn) => fn());
   });
 
   it('should fetch and store seasons successfully', async () => {
@@ -114,5 +117,30 @@ describe('Seasons Ergast Service', () => {
     // Assert
     expect(result).toHaveLength(3);
     expect(result[0].champion).toBeNull();
+  });
+
+  it('should handle missing Seasons property in API response', async () => {
+    // Arrange
+    const mockResponse = {
+      data: {
+        MRData: {
+          SeasonTable: {
+            // No Seasons property
+          },
+        },
+      },
+    };
+
+    (axios.get as jest.Mock).mockResolvedValueOnce(mockResponse);
+    (Season.deleteMany as jest.Mock).mockResolvedValueOnce({ ok: 1 });
+    (Season.insertMany as jest.Mock).mockResolvedValueOnce([]);
+
+    // Act
+    const result = await seasonsErgastService.fetchAndStoreSeasonsFromErgast();
+
+    // Assert
+    expect(result).toEqual([]);
+    expect(Season.deleteMany).toHaveBeenCalled();
+    expect(Season.insertMany).toHaveBeenCalledWith([]);
   });
 });

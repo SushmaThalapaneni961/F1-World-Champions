@@ -222,5 +222,77 @@ describe('Race Controller', () => {
       // Assert
       expect(next).toHaveBeenCalledWith(error);
     });
+
+    it('should handle cached data without data property', async () => {
+      // Arrange
+      const req = { params: { season: '2023' } } as unknown as Request;
+      const res = mockResponse();
+      const next = jest.fn() as NextFunction;
+
+      const cachedData = {
+        status: 'success',
+        statusCode: 200,
+        message: 'Race winners for season 2023',
+      };
+
+      (redisClient.get as jest.Mock).mockResolvedValue(JSON.stringify(cachedData));
+
+      // Act
+      await raceController.getAllRaces(req, res, next);
+
+      // Assert
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'success',
+        statusCode: 200,
+        data: [],
+        message: 'Race winners retrieved (cached)',
+      });
+      expect(raceService.getRacesBySeasonFromDb).not.toHaveBeenCalled();
+    });
+
+    it('should handle race objects without toObject method', async () => {
+      // Arrange
+      const mockRaces = [
+        {
+          season: '2023',
+          round: '1',
+          raceName: 'Test Grand Prix',
+          winner: {
+            fullName: 'Test Driver',
+          },
+        },
+      ];
+      const req = { params: { season: '2023' } } as unknown as Request;
+      const res = mockResponse();
+      const next = jest.fn() as NextFunction;
+
+      (redisClient.get as jest.Mock).mockResolvedValue(null);
+      (seasonChampionService.getSeasonChampion as jest.Mock).mockResolvedValue(null);
+      (raceService.getRacesBySeasonFromDb as jest.Mock).mockResolvedValue(mockRaces);
+      (redisClient.setEx as jest.Mock).mockResolvedValue('OK');
+
+      // Act
+      await raceController.getAllRaces(req, res, next);
+
+      // Assert
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        status: 'success',
+        statusCode: 200,
+        data: expect.arrayContaining([
+          expect.objectContaining({
+            season: '2023',
+            round: '1',
+            raceName: 'Test Grand Prix',
+            winner: expect.objectContaining({
+              fullName: 'Test Driver',
+            }),
+            isChampionWinner: false,
+          }),
+        ]),
+        message: 'Race winners for season 2023',
+      });
+    });
   });
 });
