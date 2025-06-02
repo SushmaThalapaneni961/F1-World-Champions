@@ -5,7 +5,7 @@ import { Error } from '../../../components/common/Error/Error';
 describe('Error Component', () => {
   it('renders with default props', () => {
     render(<Error message="Something went wrong" />);
-    
+
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
     expect(screen.getByTestId('error-icon')).toBeInTheDocument();
     expect(screen.getByTestId('error-icon').closest('.error-container')).toHaveClass('unknown');
@@ -13,7 +13,7 @@ describe('Error Component', () => {
 
   it('renders with custom type', () => {
     render(<Error message="Network error" type="network" />);
-    
+
     expect(screen.getByText('Network error')).toBeInTheDocument();
     expect(screen.getByTestId('error-icon')).toBeInTheDocument();
     expect(screen.getByTestId('error-icon').closest('.error-container')).toHaveClass('network');
@@ -22,7 +22,7 @@ describe('Error Component', () => {
   it('renders with custom icon', () => {
     const customIcon = <span data-testid="custom-icon">🚨</span>;
     render(<Error message="Custom error" icon={customIcon} />);
-    
+
     expect(screen.getByTestId('custom-icon')).toBeInTheDocument();
     expect(screen.getByText('🚨')).toBeInTheDocument();
   });
@@ -30,19 +30,19 @@ describe('Error Component', () => {
   it('renders with primary action button', () => {
     const handleAction = vi.fn();
     render(
-      <Error 
-        message="Action error" 
+      <Error
+        message="Action error"
         action={{
           label: 'Retry',
-          onClick: handleAction
+          onClick: handleAction,
         }}
-      />
+      />,
     );
-    
+
     const button = screen.getByRole('button', { name: 'Retry' });
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass('error-action', 'primary');
-    
+
     fireEvent.click(button);
     expect(handleAction).toHaveBeenCalledTimes(1);
   });
@@ -50,37 +50,32 @@ describe('Error Component', () => {
   it('renders with secondary action button', () => {
     const handleSecondaryAction = vi.fn();
     render(
-      <Error 
-        message="Multiple actions" 
+      <Error
+        message="Multiple actions"
         action={{
           label: 'Primary',
-          onClick: vi.fn()
+          onClick: vi.fn(),
         }}
         secondaryAction={{
           label: 'Cancel',
-          onClick: handleSecondaryAction
+          onClick: handleSecondaryAction,
         }}
-      />
+      />,
     );
-    
+
     const primaryButton = screen.getByRole('button', { name: 'Primary' });
     const secondaryButton = screen.getByRole('button', { name: 'Cancel' });
-    
+
     expect(primaryButton).toHaveClass('error-action', 'primary');
     expect(secondaryButton).toHaveClass('error-action', 'secondary');
-    
+
     fireEvent.click(secondaryButton);
     expect(handleSecondaryAction).toHaveBeenCalledTimes(1);
   });
 
   it('renders with details', () => {
-    render(
-      <Error 
-        message="Error with details" 
-        details="More information about the error"
-      />
-    );
-    
+    render(<Error message="Error with details" details="More information about the error" />);
+
     expect(screen.getByText('Error with details')).toBeInTheDocument();
     expect(screen.getByText('More information about the error')).toBeInTheDocument();
   });
@@ -108,4 +103,4 @@ describe('Error Component', () => {
     render(<Error message="No details error" />);
     expect(screen.queryByTestId('error-details')).not.toBeInTheDocument();
   });
-}); 
+});

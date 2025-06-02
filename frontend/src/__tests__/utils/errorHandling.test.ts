@@ -25,21 +25,21 @@ describe('Error Handling Utilities', () => {
       originalNavigator = window.navigator;
       Object.defineProperty(window, 'navigator', {
         value: { onLine: true },
-        writable: true
+        writable: true,
       });
     });
 
     afterEach(() => {
       Object.defineProperty(window, 'navigator', {
         value: originalNavigator,
-        writable: true
+        writable: true,
       });
     });
 
     it('should detect offline status', () => {
       Object.defineProperty(window, 'navigator', {
         value: { onLine: false },
-        writable: true
+        writable: true,
       });
       expect(isNetworkError(new Error('Any error'))).toBe(true);
     });
@@ -64,7 +64,7 @@ describe('Error Handling Utilities', () => {
       expect(details).toEqual({
         message: 'Test error',
         type: 'test',
-        details: 'Test details'
+        details: 'Test details',
       });
     });
 
@@ -74,7 +74,7 @@ describe('Error Handling Utilities', () => {
       expect(details).toEqual({
         message: 'Unable to connect to the server',
         type: 'network',
-        details: 'Please check your internet connection and try again'
+        details: 'Please check your internet connection and try again',
       });
     });
 
@@ -85,7 +85,7 @@ describe('Error Handling Utilities', () => {
       expect(details).toEqual({
         message: 'Request timed out',
         type: 'timeout',
-        details: 'The server is taking too long to respond. Please try again'
+        details: 'The server is taking too long to respond. Please try again',
       });
     });
 
@@ -95,7 +95,7 @@ describe('Error Handling Utilities', () => {
       expect(details).toEqual({
         message: 'Unknown error',
         type: 'unknown',
-        details: 'Please try again or contact support if the problem persists'
+        details: 'Please try again or contact support if the problem persists',
       });
     });
   });
@@ -112,19 +112,19 @@ describe('Error Handling Utilities', () => {
     it('should resolve when promise completes before timeout', async () => {
       const promise = Promise.resolve('success');
       const result = withTimeout(promise, 1000);
-      
+
       await expect(result).resolves.toBe('success');
     });
 
     it('should reject with timeout error when promise takes too long', async () => {
-      const promise = new Promise(resolve => {
+      const promise = new Promise((resolve) => {
         setTimeout(() => resolve('success'), 2000);
       });
-      
+
       const result = withTimeout(promise, 1000);
-      
+
       vi.advanceTimersByTime(1000);
       await expect(result).rejects.toThrow('Request timed out');
     });
   });
-}); 
+});

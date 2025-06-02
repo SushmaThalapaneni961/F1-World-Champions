@@ -21,7 +21,7 @@ export const isNetworkError = (error: Error): boolean => {
   if (error instanceof APIError) {
     return false;
   }
-  
+
   const axiosError = error as AxiosError;
   return !!(
     !window.navigator.onLine ||
@@ -72,4 +72,4 @@ export const withTimeout = <T>(promise: Promise<T>, timeoutMs: number): Promise<
   });
 
   return Promise.race([promise, timeoutPromise]);
-}; 
+};

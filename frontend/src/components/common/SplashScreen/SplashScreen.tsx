@@ -21,13 +21,9 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onAnimationComplete }) => {
 
   return (
     <div data-testid="splash-screen" className={`splash-screen ${state}`}>
-      <img 
-        src={f1Logo} 
-        alt="F1 World Champions" 
-        className="splash-logo"
-      />
+      <img src={f1Logo} alt="F1 World Champions" className="splash-logo" />
     </div>
   );
-}; 
+};
 
 export { SplashScreen };

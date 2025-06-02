@@ -16,7 +16,7 @@ import userEvent from '@testing-library/user-event';
 vi.mock('react-router-dom', () => ({
   useNavigate: vi.fn(),
   useParams: vi.fn(),
-  BrowserRouter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
+  BrowserRouter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
 vi.mock('jotai', () => ({
@@ -49,12 +49,14 @@ describe('RaceWinners Page', () => {
 
     it('renders race winners table with correct data', () => {
       render(<RaceWinners />);
-      
+
       // Check table headers
       type HeaderType = 'Round' | 'Race Name' | 'Date' | 'Circuit' | 'Winner' | 'Time';
       const headers: HeaderType[] = ['Round', 'Race Name', 'Date', 'Circuit', 'Winner', 'Time'];
-      headers.forEach(header => {
-        expect(screen.getByRole('columnheader', { name: new RegExp(`${header}.*`) })).toBeInTheDocument();
+      headers.forEach((header) => {
+        expect(
+          screen.getByRole('columnheader', { name: new RegExp(`${header}.*`) }),
+        ).toBeInTheDocument();
       });
 
       // Check data rows
@@ -76,7 +78,7 @@ describe('RaceWinners Page', () => {
 
     it('navigates back to seasons page when clicking back button', () => {
       render(<RaceWinners />);
-      
+
       const backButton = screen.getByRole('button', { name: /back to seasons/i });
       fireEvent.click(backButton);
 
@@ -85,7 +87,7 @@ describe('RaceWinners Page', () => {
 
     it('sorts races when clicking column headers', () => {
       render(<RaceWinners />);
-      
+
       const dateHeader = screen.getByRole('columnheader', { name: /Date/ });
       // Click twice to get ascending order
       fireEvent.click(dateHeader);
@@ -100,7 +102,7 @@ describe('RaceWinners Page', () => {
 
     it('renders mobile cards on smaller screens', () => {
       // Mock window.matchMedia for mobile view
-      window.matchMedia = vi.fn().mockImplementation(query => ({
+      window.matchMedia = vi.fn().mockImplementation((query) => ({
         matches: query === '(max-width: 768px)',
         media: '',
         onchange: null,
@@ -109,7 +111,7 @@ describe('RaceWinners Page', () => {
       }));
 
       const { container } = render(<RaceWinners />);
-      
+
       const mobileCards = container.querySelector('.mobile-cards');
       expect(mobileCards).toBeInTheDocument();
       expect(screen.getAllByText(mockRaceWinners[0].raceName)[0]).toBeInTheDocument();
@@ -117,9 +119,9 @@ describe('RaceWinners Page', () => {
 
     it('highlights champion winners', () => {
       render(<RaceWinners />);
-      
-      const championRaces = mockRaceWinners.filter(race => race.isChampionWinner);
-      championRaces.forEach(race => {
+
+      const championRaces = mockRaceWinners.filter((race) => race.isChampionWinner);
+      championRaces.forEach((race) => {
         const row = screen.getByRole('row', { name: new RegExp(race.raceName) });
         expect(row).toHaveClass('champion-winner');
       });
@@ -188,16 +190,18 @@ describe('RaceWinners Page', () => {
     });
 
     it('handles missing winner data', () => {
-      const raceWinnersWithMissingData = [{
-        ...mockRaceWinners[0],
-        winner: {
-          ...mockRaceWinners[0].winner,
-          fullName: null,
-          time: null,
-          laps: null,
-          nationality: null
-        }
-      }];
+      const raceWinnersWithMissingData = [
+        {
+          ...mockRaceWinners[0],
+          winner: {
+            ...mockRaceWinners[0].winner,
+            fullName: null,
+            time: null,
+            laps: null,
+            nationality: null,
+          },
+        },
+      ];
 
       (useAtom as unknown as ReturnType<typeof vi.fn>).mockImplementation((atom) => {
         if (atom === seasonRaceWinnersAtom) return [raceWinnersWithMissingData];
@@ -213,14 +217,16 @@ describe('RaceWinners Page', () => {
     });
 
     it('handles missing circuit data', () => {
-      const raceWinnersWithMissingCircuit = [{
-        ...mockRaceWinners[0],
-        circuit: {
-          ...mockRaceWinners[0].circuit,
-          name: null,
-          locality: null
-        }
-      }];
+      const raceWinnersWithMissingCircuit = [
+        {
+          ...mockRaceWinners[0],
+          circuit: {
+            ...mockRaceWinners[0].circuit,
+            name: null,
+            locality: null,
+          },
+        },
+      ];
 
       (useAtom as unknown as ReturnType<typeof vi.fn>).mockImplementation((atom) => {
         if (atom === seasonRaceWinnersAtom) return [raceWinnersWithMissingCircuit];
@@ -236,11 +242,13 @@ describe('RaceWinners Page', () => {
     });
 
     it('handles large dataset without performance issues', async () => {
-      const largeDataset = Array(1000).fill(null).map((_, index) => ({
-        ...mockRaceWinners[0],
-        round: String(index + 1),
-        raceName: `Race ${index + 1}`
-      }));
+      const largeDataset = Array(1000)
+        .fill(null)
+        .map((_, index) => ({
+          ...mockRaceWinners[0],
+          round: String(index + 1),
+          raceName: `Race ${index + 1}`,
+        }));
 
       (useAtom as unknown as ReturnType<typeof vi.fn>).mockImplementation((atom) => {
         if (atom === seasonRaceWinnersAtom) return [largeDataset];
@@ -251,22 +259,24 @@ describe('RaceWinners Page', () => {
       });
 
       const { container } = render(<RaceWinners />);
-      
+
       // Check if virtualization or pagination is working
       const tableRows = container.querySelectorAll('tr');
       expect(tableRows.length).toBeLessThanOrEqual(1001); // Should not render more than header + 1000 rows
     }, 30000); // Increased timeout to 30 seconds
 
     it('handles malformed race data gracefully', () => {
-      const malformedData = [{
-        ...mockRaceWinners[0],
-        round: 'invalid',
-        date: 'Invalid Date',
-        winner: {
-          ...mockRaceWinners[0].winner,
-          time: 'invalid-time'
-        }
-      }];
+      const malformedData = [
+        {
+          ...mockRaceWinners[0],
+          round: 'invalid',
+          date: 'Invalid Date',
+          winner: {
+            ...mockRaceWinners[0].winner,
+            time: 'invalid-time',
+          },
+        },
+      ];
 
       (useAtom as unknown as ReturnType<typeof vi.fn>).mockImplementation((atom) => {
         if (atom === seasonRaceWinnersAtom) return [malformedData];
@@ -282,4 +292,4 @@ describe('RaceWinners Page', () => {
       expect(screen.getByRole('cell', { name: 'invalid-time' })).toBeInTheDocument();
     });
   });
-}); 
+});

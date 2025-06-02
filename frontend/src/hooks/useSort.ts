@@ -27,11 +27,11 @@ export function useSort<T>(items: T[] | null | undefined, defaultSort?: SortConf
 
   const requestSort = (key: string) => {
     let direction: SortDirection = 'asc';
-    
+
     if (sortConfig?.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
     }
-    
+
     setSortConfig({ key, direction });
   };
 
@@ -40,4 +40,4 @@ export function useSort<T>(items: T[] | null | undefined, defaultSort?: SortConf
     sortConfig,
     requestSort,
   };
-} 
+}

@@ -17,7 +17,7 @@ export default defineConfig({
         'src/components/**/*.{ts,tsx}',
         'src/store/**/*.{ts,tsx}',
         'src/utils/**/*.{ts,tsx}',
-        'src/lib/**/*.{ts,tsx}'
+        'src/lib/**/*.{ts,tsx}',
       ],
       exclude: [
         'node_modules/',
@@ -27,15 +27,15 @@ export default defineConfig({
         '**/*.test.{ts,tsx}',
         '**/*.spec.{ts,tsx}',
         '**/types/**',
-        '**/constants/**'
+        '**/constants/**',
       ],
       all: true,
       thresholds: {
         branches: 80,
         functions: 80,
         lines: 80,
-        statements: 80
-      }
+        statements: 80,
+      },
     },
     testTimeout: 30000,
   },

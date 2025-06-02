@@ -17,13 +17,13 @@ export interface TableProps<T> {
   rowClassName?: (item: T) => string | undefined;
 }
 
-export function Table<T>({ 
-  columns, 
-  data, 
-  onRowClick, 
-  sortConfig, 
+export function Table<T>({
+  columns,
+  data,
+  onRowClick,
+  sortConfig,
   onSort,
-  rowClassName 
+  rowClassName,
 }: TableProps<T>) {
   const renderCell = (item: T, column: Column<T>) => {
     return column.render(item);
@@ -46,11 +46,7 @@ export function Table<T>({
                 className={onSort ? 'sortable' : ''}
               >
                 {column.header}
-                {onSort && (
-                  <span className="sort-icon">
-                    {getSortIcon(column.accessor)}
-                  </span>
-                )}
+                {onSort && <span className="sort-icon">{getSortIcon(column.accessor)}</span>}
               </th>
             ))}
           </tr>
@@ -71,4 +67,4 @@ export function Table<T>({
       </table>
     </div>
   );
-} 
+}

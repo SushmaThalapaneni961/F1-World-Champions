@@ -27,4 +27,4 @@ describe('LoadingSpinner Component', () => {
     expect(screen.getByTestId('spinner')).toHaveClass('spinner');
     expect(screen.getByTestId('loading-text')).toHaveClass('loading-text');
   });
-}); 
+});

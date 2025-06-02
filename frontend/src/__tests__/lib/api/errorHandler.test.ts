@@ -5,16 +5,10 @@ import { AxiosError } from 'axios';
 describe('Error Handler', () => {
   describe('handleApiError', () => {
     it('handles Axios error with response data', () => {
-      const axiosError = new AxiosError(
-        'Request failed',
-        'ERR_BAD_REQUEST',
-        undefined,
-        undefined,
-        {
-          status: 400,
-          data: { message: 'Bad Request' },
-        } as any
-      );
+      const axiosError = new AxiosError('Request failed', 'ERR_BAD_REQUEST', undefined, undefined, {
+        status: 400,
+        data: { message: 'Bad Request' },
+      } as any);
 
       const apiError = handleApiError(axiosError);
       expect(apiError).toBeInstanceOf(APIError);
@@ -24,10 +18,7 @@ describe('Error Handler', () => {
     });
 
     it('handles Axios error without response data', () => {
-      const axiosError = new AxiosError(
-        'Network Error',
-        'ERR_NETWORK'
-      );
+      const axiosError = new AxiosError('Network Error', 'ERR_NETWORK');
 
       const apiError = handleApiError(axiosError);
       expect(apiError).toBeInstanceOf(APIError);
@@ -73,4 +64,4 @@ describe('Error Handler', () => {
       expect(error.data).toBeUndefined();
     });
   });
-}); 
+});

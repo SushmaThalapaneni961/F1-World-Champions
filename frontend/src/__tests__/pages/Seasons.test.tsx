@@ -4,13 +4,18 @@ import { useAtom } from 'jotai';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import Seasons from '../../pages/Seasons/Seasons';
 import { mockSeasons } from '../mocks/seasons.mock';
-import { seasonsAtom, loadingAtom, errorAtom, fetchSeasonsAtom } from '../../store/atoms/seasons.atom';
+import {
+  seasonsAtom,
+  loadingAtom,
+  errorAtom,
+  fetchSeasonsAtom,
+} from '../../store/atoms/seasons.atom';
 import { BrowserRouter } from 'react-router-dom';
 
 // Mock dependencies
 vi.mock('react-router-dom', () => ({
   useNavigate: vi.fn(),
-  BrowserRouter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>
+  BrowserRouter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
 vi.mock('jotai', () => ({
@@ -19,11 +24,7 @@ vi.mock('jotai', () => ({
 }));
 
 const renderWithRouter = (ui: React.ReactElement) => {
-  return render(
-    <BrowserRouter>
-      {ui}
-    </BrowserRouter>
-  );
+  return render(<BrowserRouter>{ui}</BrowserRouter>);
 };
 
 describe('Seasons Page', () => {
@@ -49,14 +50,14 @@ describe('Seasons Page', () => {
 
     it('renders seasons table with correct data', () => {
       renderWithRouter(<Seasons />);
-      
+
       // Check column headers (including sort icons)
       expect(screen.getByRole('columnheader', { name: /Season/i })).toBeInTheDocument();
       expect(screen.getByRole('columnheader', { name: /Champion/i })).toBeInTheDocument();
       expect(screen.getByRole('columnheader', { name: /Nationality/i })).toBeInTheDocument();
 
       // Check data rows
-      mockSeasons.forEach(season => {
+      mockSeasons.forEach((season) => {
         expect(screen.getByText(season.season)).toBeInTheDocument();
         expect(screen.getAllByText(season.championName)[0]).toBeInTheDocument();
         expect(screen.getAllByText(season.nationality)[0]).toBeInTheDocument();
@@ -65,16 +66,16 @@ describe('Seasons Page', () => {
 
     it('renders mobile cards', () => {
       renderWithRouter(<Seasons />);
-      
+
       expect(screen.getByTestId('mobile-view')).toBeInTheDocument();
-      mockSeasons.forEach(season => {
+      mockSeasons.forEach((season) => {
         expect(screen.getByText(`F1 Season ${season.season}`)).toBeInTheDocument();
       });
     });
 
     it('navigates to race winners page when clicking a season', () => {
       renderWithRouter(<Seasons />);
-      
+
       const firstSeasonRow = screen.getByRole('row', { name: new RegExp(mockSeasons[0].season) });
       fireEvent.click(firstSeasonRow);
 
@@ -83,7 +84,7 @@ describe('Seasons Page', () => {
 
     it('sorts seasons when clicking column headers', () => {
       renderWithRouter(<Seasons />);
-      
+
       const seasonHeader = screen.getByRole('columnheader', { name: /season/i });
       fireEvent.click(seasonHeader);
 
@@ -156,11 +157,13 @@ describe('Seasons Page', () => {
     });
 
     it('handles missing champion data', () => {
-      const seasonsWithMissingData = [{
-        ...mockSeasons[0],
-        championName: null,
-        nationality: null
-      }];
+      const seasonsWithMissingData = [
+        {
+          ...mockSeasons[0],
+          championName: null,
+          nationality: null,
+        },
+      ];
 
       (useAtom as unknown as ReturnType<typeof vi.fn>).mockImplementation((atom) => {
         if (atom === seasonsAtom) return [seasonsWithMissingData];
@@ -176,10 +179,12 @@ describe('Seasons Page', () => {
     });
 
     it('handles large dataset without performance issues', async () => {
-      const largeDataset = Array(1000).fill(null).map((_, index) => ({
-        ...mockSeasons[0],
-        season: String(2000 + index)
-      }));
+      const largeDataset = Array(1000)
+        .fill(null)
+        .map((_, index) => ({
+          ...mockSeasons[0],
+          season: String(2000 + index),
+        }));
 
       (useAtom as unknown as ReturnType<typeof vi.fn>).mockImplementation((atom) => {
         if (atom === seasonsAtom) return [largeDataset];
@@ -190,18 +195,20 @@ describe('Seasons Page', () => {
       });
 
       const { container } = renderWithRouter(<Seasons />);
-      
+
       // Check if virtualization or pagination is working
       const tableRows = container.querySelectorAll('tr');
       expect(tableRows.length).toBeLessThanOrEqual(1001); // Should not render more than header + 1000 rows
     }, 30000); // Increased timeout to 30 seconds to match global config
 
     it('handles malformed season data gracefully', () => {
-      const malformedData = [{
-        season: 'invalid',
-        championName: undefined,
-        nationality: null
-      }];
+      const malformedData = [
+        {
+          season: 'invalid',
+          championName: undefined,
+          nationality: null,
+        },
+      ];
 
       (useAtom as unknown as ReturnType<typeof vi.fn>).mockImplementation((atom) => {
         if (atom === seasonsAtom) return [malformedData];
@@ -217,4 +224,4 @@ describe('Seasons Page', () => {
       expect(placeholders).toHaveLength(2); // For undefined championName and null nationality
     });
   });
-}); 
+});

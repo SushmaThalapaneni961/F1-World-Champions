@@ -19,10 +19,10 @@ describe('Button Component', () => {
   it('handles click events', () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Click me</Button>);
-    
+
     const button = screen.getByRole('button', { name: /click me/i });
     fireEvent.click(button);
-    
+
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
@@ -30,12 +30,12 @@ describe('Button Component', () => {
     render(
       <Button icon={<span data-testid="test-icon">icon</span>} iconPosition="left">
         With Icon
-      </Button>
+      </Button>,
     );
-    
+
     const icon = screen.getByTestId('test-icon');
     const button = screen.getByRole('button', { name: /with icon/i });
-    
+
     expect(icon).toBeInTheDocument();
     expect(button).toHaveClass('with-icon');
     expect(button.firstElementChild).toContainElement(icon);
@@ -45,12 +45,12 @@ describe('Button Component', () => {
     render(
       <Button icon={<span data-testid="test-icon">icon</span>} iconPosition="right">
         With Icon
-      </Button>
+      </Button>,
     );
-    
+
     const icon = screen.getByTestId('test-icon');
     const button = screen.getByRole('button', { name: /with icon/i });
-    
+
     expect(icon).toBeInTheDocument();
     expect(button).toHaveClass('with-icon');
     expect(button.lastElementChild).toContainElement(icon);
@@ -61,4 +61,4 @@ describe('Button Component', () => {
     const button = screen.getByRole('button', { name: /custom/i });
     expect(button).toHaveClass('custom-class');
   });
-}); 
+});

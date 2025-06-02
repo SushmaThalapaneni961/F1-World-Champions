@@ -9,7 +9,11 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ text = 'Loading...' }) 
   return (
     <div data-testid="spinner-container" className="loading-spinner-container">
       <div data-testid="spinner" className="spinner" />
-      {text && <div data-testid="loading-text" className="loading-text">{text}</div>}
+      {text && (
+        <div data-testid="loading-text" className="loading-text">
+          {text}
+        </div>
+      )}
     </div>
   );
 };

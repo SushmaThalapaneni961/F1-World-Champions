@@ -60,35 +60,47 @@ axiosInstance.interceptors.response.use(
 const originalGet = axiosInstance.get;
 axiosInstance.get = function get<T = any, R = AxiosResponse<T>>(
   url: string,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<R> {
-  return withTimeout(originalGet.call(this, url, config), config?.timeout || DEFAULT_TIMEOUT) as Promise<R>;
+  return withTimeout(
+    originalGet.call(this, url, config),
+    config?.timeout || DEFAULT_TIMEOUT,
+  ) as Promise<R>;
 };
 
 const originalPost = axiosInstance.post;
 axiosInstance.post = function post<T = any, R = AxiosResponse<T>>(
   url: string,
   data?: any,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<R> {
-  return withTimeout(originalPost.call(this, url, data, config), config?.timeout || DEFAULT_TIMEOUT) as Promise<R>;
+  return withTimeout(
+    originalPost.call(this, url, data, config),
+    config?.timeout || DEFAULT_TIMEOUT,
+  ) as Promise<R>;
 };
 
 const originalPut = axiosInstance.put;
 axiosInstance.put = function put<T = any, R = AxiosResponse<T>>(
   url: string,
   data?: any,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<R> {
-  return withTimeout(originalPut.call(this, url, data, config), config?.timeout || DEFAULT_TIMEOUT) as Promise<R>;
+  return withTimeout(
+    originalPut.call(this, url, data, config),
+    config?.timeout || DEFAULT_TIMEOUT,
+  ) as Promise<R>;
 };
 
 const originalDelete = axiosInstance.delete;
 axiosInstance.delete = function del<T = any, R = AxiosResponse<T>>(
   url: string,
-  config?: AxiosRequestConfig
+  config?: AxiosRequestConfig,
 ): Promise<R> {
-  return withTimeout(originalDelete.call(this, url, config), config?.timeout || DEFAULT_TIMEOUT) as Promise<R>;
+  return withTimeout(
+    originalDelete.call(this, url, config),
+    config?.timeout || DEFAULT_TIMEOUT,
+  ) as Promise<R>;
 };
 
 export default axiosInstance;

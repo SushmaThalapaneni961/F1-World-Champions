@@ -17,7 +17,7 @@
   &__logo {
     position: relative;
     z-index: $z-index-header + 2;
-    
+
     &--animated {
       opacity: 0;
       animation: fadeIn 0.3s ease-out forwards;

@@ -4,4 +4,4 @@ const mockAtom = vi.fn((initialValue: any) => ({
   init: initialValue,
 }));
 
-export { mockAtom as atom }; 
+export { mockAtom as atom };

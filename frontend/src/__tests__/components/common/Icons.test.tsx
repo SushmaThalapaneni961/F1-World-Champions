@@ -7,7 +7,7 @@ describe('Icons Components', () => {
     it('renders with default props', () => {
       const { container } = render(<ArrowLeft />);
       const icon = container.querySelector('svg');
-      
+
       expect(icon).toBeInTheDocument();
       expect(icon).toHaveAttribute('width', '24');
       expect(icon).toHaveAttribute('height', '24');
@@ -18,7 +18,7 @@ describe('Icons Components', () => {
       const size = 32;
       const { container } = render(<ArrowLeft size={size} />);
       const icon = container.querySelector('svg');
-      
+
       expect(icon).toHaveAttribute('width', size.toString());
       expect(icon).toHaveAttribute('height', size.toString());
     });
@@ -27,7 +27,7 @@ describe('Icons Components', () => {
       const color = '#FF0000';
       const { container } = render(<ArrowLeft color={color} />);
       const icon = container.querySelector('svg');
-      
+
       expect(icon).toHaveAttribute('stroke', color);
     });
 
@@ -35,18 +35,18 @@ describe('Icons Components', () => {
       const className = 'custom-class';
       const { container } = render(<ArrowLeft className={className} />);
       const icon = container.querySelector('svg');
-      
+
       expect(icon).toHaveClass('icon', className);
     });
 
     it('maintains SVG attributes', () => {
       const { container } = render(<ArrowLeft />);
       const icon = container.querySelector('svg');
-      
+
       expect(icon).toHaveAttribute('fill', 'none');
       expect(icon).toHaveAttribute('stroke-width', '2');
       expect(icon).toHaveAttribute('stroke-linecap', 'round');
       expect(icon).toHaveAttribute('stroke-linejoin', 'round');
     });
   });
-}); 
+});

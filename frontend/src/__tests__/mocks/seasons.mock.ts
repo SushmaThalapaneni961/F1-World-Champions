@@ -21,4 +21,4 @@ export const mockSeasons: ISeason[] = [
     championName: 'Lewis Hamilton',
     nationality: 'British',
   },
-]; 
+];

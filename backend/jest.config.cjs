@@ -12,8 +12,8 @@ module.exports = {
       branches: 80,
       functions: 80,
       lines: 80,
-      statements: 80
-    }
+      statements: 80,
+    },
   },
   collectCoverageFrom: [
     'src/**/*.{ts,js}',
@@ -24,8 +24,8 @@ module.exports = {
     '!src/config/**',
     '!src/**/index.ts',
     '!src/app.ts',
-    '!src/server.ts'
+    '!src/server.ts',
   ],
   verbose: true,
-  testTimeout: 30000
+  testTimeout: 30000,
 };

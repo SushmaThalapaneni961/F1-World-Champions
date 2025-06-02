@@ -2,7 +2,12 @@ import * as React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAtom } from 'jotai';
 
-import { fetchSeasonRaceWinnersAtom, seasonRaceWinnersAtom, loadingAtom, errorAtom } from '../../store/atoms/raceWinners.atom';
+import {
+  fetchSeasonRaceWinnersAtom,
+  seasonRaceWinnersAtom,
+  loadingAtom,
+  errorAtom,
+} from '../../store/atoms/raceWinners.atom';
 import { useSort } from '../../hooks/useSort';
 import type { IRaceWinner } from '../../store/types/raceWinners.types';
 import './RaceWinners.scss';
@@ -17,9 +22,13 @@ const RaceWinners = () => {
   const [loading] = useAtom(loadingAtom);
   const [error] = useAtom(errorAtom);
 
-  const { items: sortedRaces, sortConfig, requestSort } = useSort<IRaceWinner>(
+  const {
+    items: sortedRaces,
+    sortConfig,
+    requestSort,
+  } = useSort<IRaceWinner>(
     raceWinners,
-    { key: 'date', direction: 'asc' } // Default sort by date in ascending order
+    { key: 'date', direction: 'asc' }, // Default sort by date in ascending order
   );
 
   React.useEffect(() => {
@@ -39,56 +48,58 @@ const RaceWinners = () => {
   };
 
   if (loading) return <LoadingSpinner />;
-  if (error) return (
-    <Error
-      message={error}
-      action={{
-        label: 'Retry',
-        onClick: handleRetry
-      }}
-    />
-  );
-  if (!raceWinners || !raceWinners.length) return (
-    <Error
-      message={`No race winners found for season ${season}.`}
-      action={{
-        label: 'Retry',
-        onClick: handleRetry
-      }}
-    />
-  );
+  if (error)
+    return (
+      <Error
+        message={error}
+        action={{
+          label: 'Retry',
+          onClick: handleRetry,
+        }}
+      />
+    );
+  if (!raceWinners || !raceWinners.length)
+    return (
+      <Error
+        message={`No race winners found for season ${season}.`}
+        action={{
+          label: 'Retry',
+          onClick: handleRetry,
+        }}
+      />
+    );
 
   const columns: Column<IRaceWinner>[] = [
-    { 
+    {
       header: 'Round',
       accessor: 'round',
-      render: (row: { round: any; }) => String(row.round)
+      render: (row: { round: any }) => String(row.round),
     },
-    { 
+    {
       header: 'Race Name',
       accessor: 'raceName',
-      render: (row: { raceName: any; }) => row.raceName
+      render: (row: { raceName: any }) => row.raceName,
     },
-    { 
+    {
       header: 'Date',
       accessor: 'date',
-      render: (row: { date: string | number | Date; }) => new Date(row.date).toLocaleDateString()
+      render: (row: { date: string | number | Date }) => new Date(row.date).toLocaleDateString(),
     },
-    { 
+    {
       header: 'Circuit',
       accessor: 'circuit',
-      render: (row: { circuit: { name: any; }; }) => String(row.circuit?.name || '-')
+      render: (row: { circuit: { name: any } }) => String(row.circuit?.name || '-'),
     },
-    { 
+    {
       header: 'Winner',
       accessor: 'winnerName',
-      render: (row: { winner: { fullName: any; }; }) => String(row.winner?.fullName || '-')
+      render: (row: { winner: { fullName: any } }) => String(row.winner?.fullName || '-'),
     },
-    { 
+    {
       header: 'Time',
       accessor: 'winnerTime',
-      render: (row: { winner: { time: any; }; }) => String(row.winner?.time || '-')
-    }
+      render: (row: { winner: { time: any } }) => String(row.winner?.time || '-'),
+    },
   ];
 
   const renderMobileCards = () => (
@@ -101,24 +112,24 @@ const RaceWinners = () => {
           infoRows={[
             {
               label: 'Round',
-              value: String(race.round)
+              value: String(race.round),
             },
             {
               label: 'Date',
-              value: new Date(race.date).toLocaleDateString()
+              value: new Date(race.date).toLocaleDateString(),
             },
             {
               label: 'Circuit',
-              value: race.circuit?.name ? String(race.circuit.name) : '-'
+              value: race.circuit?.name ? String(race.circuit.name) : '-',
             },
             {
               label: 'Winner',
-              value: race.winner?.fullName ? String(race.winner.fullName) : '-'
+              value: race.winner?.fullName ? String(race.winner.fullName) : '-',
             },
             {
               label: 'Time',
-              value: race.winner?.time ? String(race.winner.time) : '-'
-            }
+              value: race.winner?.time ? String(race.winner.time) : '-',
+            },
           ]}
         />
       ))}
@@ -128,7 +139,12 @@ const RaceWinners = () => {
   return (
     <div className="race-winners-container">
       <div className="page-header">
-        <h1>Race Winners - Season <span className="season-number"><b>{season}</b></span></h1>
+        <h1>
+          Race Winners - Season{' '}
+          <span className="season-number">
+            <b>{season}</b>
+          </span>
+        </h1>
         <Button
           variant="secondary"
           onClick={handleBack}
@@ -144,7 +160,7 @@ const RaceWinners = () => {
           data={sortedRaces}
           sortConfig={sortConfig}
           onSort={requestSort}
-          rowClassName={(row) => row.isChampionWinner ? 'champion-winner' : ''}
+          rowClassName={(row) => (row.isChampionWinner ? 'champion-winner' : '')}
         />
       </div>
       {renderMobileCards()}

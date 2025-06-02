@@ -16,10 +16,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   return (
-    <button
-      className={`button ${variant} ${className} ${icon ? 'with-icon' : ''}`}
-      {...props}
-    >
+    <button className={`button ${variant} ${className} ${icon ? 'with-icon' : ''}`} {...props}>
       {icon && iconPosition === 'left' && <span className="icon">{icon}</span>}
       {children}
       {icon && iconPosition === 'right' && <span className="icon">{icon}</span>}
@@ -27,4 +24,4 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export { Button }; 
+export { Button };

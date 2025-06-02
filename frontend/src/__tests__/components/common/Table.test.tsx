@@ -16,20 +16,20 @@ describe('Table Component', () => {
   ];
 
   const columns: Column<TestData>[] = [
-    { 
-      header: 'ID', 
+    {
+      header: 'ID',
       accessor: 'id',
-      render: (row: TestData) => row.id.toString()
+      render: (row: TestData) => row.id.toString(),
     },
-    { 
-      header: 'Name', 
+    {
+      header: 'Name',
       accessor: 'name',
-      render: (row: TestData) => row.name
+      render: (row: TestData) => row.name,
     },
-    { 
-      header: 'Age', 
+    {
+      header: 'Age',
       accessor: 'age',
-      render: (row: TestData) => row.age.toString()
+      render: (row: TestData) => row.age.toString(),
     },
   ];
 
@@ -37,12 +37,12 @@ describe('Table Component', () => {
     render(<Table columns={columns} data={testData} />);
 
     // Check headers
-    columns.forEach(column => {
+    columns.forEach((column) => {
       expect(screen.getByText(column.header)).toBeInTheDocument();
     });
 
     // Check data
-    testData.forEach(item => {
+    testData.forEach((item) => {
       expect(screen.getByText(item.name)).toBeInTheDocument();
       expect(screen.getByText(item.age.toString())).toBeInTheDocument();
     });
@@ -60,16 +60,9 @@ describe('Table Component', () => {
   });
 
   it('applies custom row className', () => {
-    const rowClassName = (item: TestData) => 
-      item.age > 25 ? 'highlight' : undefined;
+    const rowClassName = (item: TestData) => (item.age > 25 ? 'highlight' : undefined);
 
-    render(
-      <Table 
-        columns={columns} 
-        data={testData} 
-        rowClassName={rowClassName}
-      />
-    );
+    render(<Table columns={columns} data={testData} rowClassName={rowClassName} />);
 
     const rows = screen.getAllByRole('row').slice(1); // Skip header row
     expect(rows[0]).toHaveClass('highlight'); // John Doe (30)
@@ -79,12 +72,12 @@ describe('Table Component', () => {
   it('handles sorting when sortConfig is provided', () => {
     const handleSort = vi.fn();
     render(
-      <Table 
-        columns={columns} 
+      <Table
+        columns={columns}
         data={testData}
         sortConfig={{ key: 'name', direction: 'asc' }}
         onSort={handleSort}
-      />
+      />,
     );
 
     const nameHeader = screen.getByText('Name');
@@ -107,12 +100,12 @@ describe('Table Component', () => {
       {
         header: 'Status',
         accessor: 'status',
-        render: (row: TestData) => row.age > 25 ? 'Senior' : 'Junior'
-      }
+        render: (row: TestData) => (row.age > 25 ? 'Senior' : 'Junior'),
+      },
     ];
 
     render(<Table columns={columnsWithRender} data={testData} />);
-    
+
     expect(screen.getByText('Senior')).toBeInTheDocument(); // John Doe
     expect(screen.getByText('Junior')).toBeInTheDocument(); // Jane Smith
   });
@@ -126,7 +119,7 @@ describe('Table Component', () => {
   it('handles undefined onSort', () => {
     render(<Table columns={columns} data={testData} />);
     const headers = screen.getAllByRole('columnheader');
-    headers.forEach(header => {
+    headers.forEach((header) => {
       expect(header).not.toHaveClass('sortable');
       expect(header.querySelector('.sort-icon')).not.toBeInTheDocument();
     });
@@ -135,7 +128,7 @@ describe('Table Component', () => {
   it('handles undefined rowClassName', () => {
     render(<Table columns={columns} data={testData} />);
     const rows = screen.getAllByRole('row').slice(1);
-    rows.forEach(row => {
+    rows.forEach((row) => {
       expect(row.className.trim()).toBe(row.className.trim()); // No extra spaces
       expect(row.className).not.toContain('undefined');
     });
@@ -143,25 +136,25 @@ describe('Table Component', () => {
 
   it('displays correct sort direction icons', () => {
     const { rerender } = render(
-      <Table 
-        columns={columns} 
+      <Table
+        columns={columns}
         data={testData}
         sortConfig={{ key: 'name', direction: 'asc' }}
         onSort={vi.fn()}
-      />
+      />,
     );
 
     expect(screen.getByText('Name').querySelector('.sort-icon')).toHaveTextContent('↑');
 
     rerender(
-      <Table 
-        columns={columns} 
+      <Table
+        columns={columns}
         data={testData}
         sortConfig={{ key: 'name', direction: 'desc' }}
         onSort={vi.fn()}
-      />
+      />,
     );
 
     expect(screen.getByText('Name').querySelector('.sort-icon')).toHaveTextContent('↓');
   });
-}); 
+});

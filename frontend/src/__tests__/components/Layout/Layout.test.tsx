@@ -7,8 +7,8 @@ import * as RouterDom from 'react-router-dom';
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
-    ...actual as any,
-    Outlet: vi.fn()
+    ...(actual as any),
+    Outlet: vi.fn(),
   };
 });
 
@@ -16,7 +16,7 @@ describe('Layout Component', () => {
   it('renders header with title', () => {
     vi.mocked(RouterDom.Outlet).mockImplementation(() => <div>Content</div>);
     render(<Layout />);
-    
+
     expect(screen.getByRole('banner')).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'F1 World Champions' })).toBeInTheDocument();
   });
@@ -25,9 +25,9 @@ describe('Layout Component', () => {
     vi.mocked(RouterDom.Outlet).mockImplementation(() => (
       <div data-testid="test-content">Test Content</div>
     ));
-    
+
     render(<Layout />);
-    
+
     expect(screen.getByTestId('test-content')).toBeInTheDocument();
     expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
@@ -35,7 +35,7 @@ describe('Layout Component', () => {
   it('applies correct CSS classes', () => {
     vi.mocked(RouterDom.Outlet).mockImplementation(() => <div>Content</div>);
     render(<Layout />);
-    
+
     expect(screen.getByRole('banner')).toHaveClass('header');
     expect(screen.getByRole('main')).toHaveClass('layout__main');
   });
@@ -43,7 +43,7 @@ describe('Layout Component', () => {
   it('renders logo in header', () => {
     vi.mocked(RouterDom.Outlet).mockImplementation(() => <div>Content</div>);
     render(<Layout />);
-    
+
     const logo = screen.getByRole('img', { name: 'F1 World Champions' });
     expect(logo).toBeInTheDocument();
     expect(logo.closest('a')).toHaveClass('header__logo');
@@ -56,9 +56,9 @@ describe('Layout Component', () => {
         <div data-testid="child-2">Second Child</div>
       </>
     ));
-    
+
     render(<Layout />);
-    
+
     expect(screen.getByTestId('child-1')).toBeInTheDocument();
     expect(screen.getByTestId('child-2')).toBeInTheDocument();
   });
@@ -66,7 +66,7 @@ describe('Layout Component', () => {
   it('maintains semantic HTML structure', () => {
     vi.mocked(RouterDom.Outlet).mockImplementation(() => <div>Content</div>);
     render(<Layout />);
-    
+
     expect(screen.getByRole('banner')).toBeInTheDocument(); // header
     expect(screen.getByRole('main')).toBeInTheDocument(); // main
     expect(screen.getByRole('contentinfo')).toBeInTheDocument(); // footer
@@ -81,4 +81,4 @@ describe('Layout Component', () => {
     expect(screen.getByRole('link', { name: 'Official F1 Website' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'FIA' })).toBeInTheDocument();
   });
-}); 
+});

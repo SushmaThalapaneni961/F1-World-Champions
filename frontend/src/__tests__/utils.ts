@@ -2,7 +2,7 @@ import { vi } from 'vitest';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export const mockMatchMedia = (matches: boolean = false) => {
-  window.matchMedia = vi.fn().mockImplementation(query => ({
+  window.matchMedia = vi.fn().mockImplementation((query) => ({
     matches,
     media: query,
     onchange: null,
@@ -46,4 +46,4 @@ export const findTableHeader = (container: HTMLElement, text: string) => {
 
 export const findTableRow = (container: HTMLElement, text: string) => {
   return container.querySelector(`tr:has-text("${text}")`);
-}; 
+};

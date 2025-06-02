@@ -12,7 +12,7 @@ const Wrapper = ({ children }: WrapperProps): React.ReactElement => {
 
 const customRender = (
   ui: ReactElement,
-  options: Omit<RenderOptions, 'wrapper'> = {}
+  options: Omit<RenderOptions, 'wrapper'> = {},
 ): ReturnType<typeof render> => {
   return render(ui, {
     wrapper: Wrapper,
@@ -21,4 +21,4 @@ const customRender = (
 };
 
 export * from '@testing-library/react';
-export { customRender as render }; 
+export { customRender as render };

@@ -1,5 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
+import axios, {
+  AxiosInstance,
+  InternalAxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+  AxiosRequestConfig,
+} from 'axios';
 import { StaticDomainApi } from '../../../lib/api/helperApi';
 import { APIError } from '../../../lib/api/errorHandler';
 import { isNetworkError, getErrorDetails } from '../../../utils/errorHandling';
@@ -8,7 +14,7 @@ import { isNetworkError, getErrorDetails } from '../../../utils/errorHandling';
 vi.mock('../../../utils/errorHandling', () => ({
   isNetworkError: vi.fn(),
   getErrorDetails: vi.fn(),
-  withTimeout: vi.fn((promise) => promise)
+  withTimeout: vi.fn((promise) => promise),
 }));
 
 // Setup mocks before any imports that might use them
@@ -26,12 +32,12 @@ const mockResponseUse = vi.fn();
 const mockAxiosInstance = {
   interceptors: {
     request: { use: mockRequestUse },
-    response: { use: mockResponseUse }
+    response: { use: mockResponseUse },
   },
   get: mockGet,
   post: mockPost,
   put: mockPut,
-  delete: mockDelete
+  delete: mockDelete,
 } as unknown as AxiosInstance;
 
 describe('Axios Setup', () => {
@@ -44,7 +50,7 @@ describe('Axios Setup', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
     vi.resetModules();
-    
+
     // Re-configure mocks for each test
     vi.mocked(axios.create).mockReturnValue(mockAxiosInstance);
     vi.mocked(StaticDomainApi.getUrl).mockReturnValue('http://test-api.com');
@@ -52,7 +58,7 @@ describe('Axios Setup', () => {
     vi.mocked(getErrorDetails).mockReturnValue({
       message: 'Test error',
       type: 'test',
-      details: 'Test details'
+      details: 'Test details',
     });
 
     // Set up interceptor capture
@@ -73,7 +79,7 @@ describe('Axios Setup', () => {
     mockPost.mockResolvedValue({ data: {} });
     mockPut.mockResolvedValue({ data: {} });
     mockDelete.mockResolvedValue({ data: {} });
-    
+
     // Import the module under test
     const module = await import('../../../lib/api/axiosSetup');
     axiosInstance = module.default;
@@ -81,7 +87,7 @@ describe('Axios Setup', () => {
 
   it('creates axios instance with correct base URL from StaticDomainApi', () => {
     expect(axios.create).toHaveBeenCalledWith({
-      baseURL: 'http://test-api.com'
+      baseURL: 'http://test-api.com',
     });
   });
 
@@ -89,29 +95,31 @@ describe('Axios Setup', () => {
     // Reset all mocks and modules
     vi.clearAllMocks();
     vi.resetModules();
-    
+
     // Setup mocks for this test
     vi.mocked(StaticDomainApi.getUrl).mockReturnValue('');
     vi.mocked(axios.create).mockReturnValue(mockAxiosInstance);
-    
+
     // Re-import to trigger new instance creation
     await import('../../../lib/api/axiosSetup');
-    
+
     expect(axios.create).toHaveBeenCalledWith({
-      baseURL: 'http://localhost:5001/api'
+      baseURL: 'http://localhost:5001/api',
     });
   });
 
   describe('Request Interceptor', () => {
     it('passes through config in request interceptor', async () => {
-      const mockConfig = { headers: { 'Content-Type': 'application/json' } } as InternalAxiosRequestConfig;
+      const mockConfig = {
+        headers: { 'Content-Type': 'application/json' },
+      } as InternalAxiosRequestConfig;
       await axiosInstance.get('/test');
       expect(mockGet).toHaveBeenCalled();
     });
 
     it('rejects with error in request error handler', async () => {
       const mockError = new Error('Request failed');
-      
+
       // Simulate request error
       mockGet.mockImplementationOnce(() => {
         if (requestErrorCallback) {
@@ -126,12 +134,12 @@ describe('Axios Setup', () => {
 
   describe('Response Interceptor', () => {
     it('passes through response in response interceptor', async () => {
-      const mockResponse = { 
+      const mockResponse = {
         data: { message: 'Success' },
         status: 200,
         statusText: 'OK',
         headers: {},
-        config: {} as InternalAxiosRequestConfig
+        config: {} as InternalAxiosRequestConfig,
       } as AxiosResponse;
 
       mockGet.mockResolvedValueOnce(mockResponse);
@@ -145,9 +153,9 @@ describe('Axios Setup', () => {
       vi.mocked(getErrorDetails).mockReturnValue({
         message: 'Network Error',
         type: 'network',
-        details: 'Connection failed'
+        details: 'Connection failed',
       });
-      
+
       // Simulate response error through the interceptor
       mockGet.mockImplementationOnce(() => {
         if (responseErrorCallback) {
@@ -169,7 +177,7 @@ describe('Axios Setup', () => {
       expect((thrownError as { data: unknown }).data).toEqual({
         message: 'Network Error',
         type: 'network',
-        details: 'Connection failed'
+        details: 'Connection failed',
       });
 
       expect(isNetworkError).toHaveBeenCalledWith(mockError);
@@ -182,9 +190,9 @@ describe('Axios Setup', () => {
       vi.mocked(getErrorDetails).mockReturnValue({
         message: 'Request timed out',
         type: 'timeout',
-        details: 'The server is taking too long to respond'
+        details: 'The server is taking too long to respond',
       });
-      
+
       // Simulate response error through the interceptor
       mockGet.mockImplementationOnce(() => {
         if (responseErrorCallback) {
@@ -206,7 +214,7 @@ describe('Axios Setup', () => {
       expect((thrownError as { data: unknown }).data).toEqual({
         message: 'Request timed out',
         type: 'timeout',
-        details: 'The server is taking too long to respond'
+        details: 'The server is taking too long to respond',
       });
 
       expect(getErrorDetails).toHaveBeenCalledWith(mockError);
@@ -247,4 +255,4 @@ describe('Axios Setup', () => {
       expect(mockDelete).toHaveBeenCalledWith(url, config);
     });
   });
-}); 
+});

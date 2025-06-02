@@ -26,7 +26,9 @@ const Card: React.FC<CardProps> = ({
     className,
     onClick ? 'clickable' : '',
     highlighted ? 'highlighted' : '',
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (onClick && (e.key === 'Enter' || e.key === ' ')) {
@@ -47,14 +49,15 @@ const Card: React.FC<CardProps> = ({
       <h3 className="card-title">{title}</h3>
       {infoRows.length > 0 && (
         <div className="card-info">
-          {infoRows.map(({ label, value }, index) => (
-            value !== null && (
-              <div key={index} className="info-row">
-                <div className="label">{label}</div>
-                <div className="value">{value}</div>
-              </div>
-            )
-          ))}
+          {infoRows.map(
+            ({ label, value }, index) =>
+              value !== null && (
+                <div key={index} className="info-row">
+                  <div className="label">{label}</div>
+                  <div className="value">{value}</div>
+                </div>
+              ),
+          )}
         </div>
       )}
     </div>
@@ -62,4 +65,3 @@ const Card: React.FC<CardProps> = ({
 };
 
 export { Card };
-

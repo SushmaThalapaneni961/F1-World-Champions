@@ -5,8 +5,8 @@ import { APIError } from '../../../lib/api/errorHandler';
 
 vi.mock('../../../lib/api/axiosSetup', () => ({
   default: {
-    get: vi.fn()
-  }
+    get: vi.fn(),
+  },
 }));
 
 describe('Seasons API', () => {
@@ -20,9 +20,9 @@ describe('Seasons API', () => {
         data: {
           data: [
             { season: '2023', url: 'http://example.com/2023' },
-            { season: '2022', url: 'http://example.com/2022' }
-          ]
-        }
+            { season: '2022', url: 'http://example.com/2022' },
+          ],
+        },
       };
 
       vi.mocked(axiosInstance.get).mockResolvedValueOnce(mockResponse);
@@ -31,11 +31,11 @@ describe('Seasons API', () => {
 
       expect(result).toEqual([
         { season: '2023', url: 'http://example.com/2023' },
-        { season: '2022', url: 'http://example.com/2022' }
+        { season: '2022', url: 'http://example.com/2022' },
       ]);
 
       expect(axiosInstance.get).toHaveBeenCalledWith('/seasons', {
-        timeout: 10000
+        timeout: 10000,
       });
     });
 
@@ -45,7 +45,7 @@ describe('Seasons API', () => {
 
       await expect(getSeasons()).rejects.toThrow(APIError);
       expect(axiosInstance.get).toHaveBeenCalledWith('/seasons', {
-        timeout: 10000
+        timeout: 10000,
       });
     });
 
@@ -55,15 +55,15 @@ describe('Seasons API', () => {
 
       await expect(getSeasons()).rejects.toThrow(APIError);
       expect(axiosInstance.get).toHaveBeenCalledWith('/seasons', {
-        timeout: 10000
+        timeout: 10000,
       });
     });
 
     it('handles empty response data', async () => {
       const mockResponse = {
         data: {
-          data: []
-        }
+          data: [],
+        },
       };
 
       vi.mocked(axiosInstance.get).mockResolvedValueOnce(mockResponse);
@@ -71,7 +71,7 @@ describe('Seasons API', () => {
       const result = await getSeasons();
       expect(result).toEqual([]);
       expect(axiosInstance.get).toHaveBeenCalledWith('/seasons', {
-        timeout: 10000
+        timeout: 10000,
       });
     });
 
@@ -79,7 +79,7 @@ describe('Seasons API', () => {
       const mockResponse = {
         data: {
           // Missing data property
-        }
+        },
       };
 
       vi.mocked(axiosInstance.get).mockResolvedValueOnce(mockResponse);
@@ -87,8 +87,8 @@ describe('Seasons API', () => {
       const result = await getSeasons();
       expect(result).toBeUndefined();
       expect(axiosInstance.get).toHaveBeenCalledWith('/seasons', {
-        timeout: 10000
+        timeout: 10000,
       });
     });
   });
-}); 
+});

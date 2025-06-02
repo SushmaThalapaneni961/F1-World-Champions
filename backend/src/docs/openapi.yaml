@@ -1,0 +1,197 @@
+openapi: 3.0.0
+info:
+  title: F1 World Champions API
+  description: API for retrieving Formula 1 World Champions and Race Winners
+  version: 1.0.0
+  contact:
+    name: API Support
+
+servers:
+  - url: http://localhost:5001
+    description: Local development server
+
+tags:
+  - name: Seasons
+    description: Operations related to F1 seasons and champions
+  - name: Races
+    description: Operations related to F1 races and winners
+
+components:
+  schemas:
+    Champion:
+      type: object
+      properties:
+        driverId:
+          type: string
+          example: 'max_verstappen'
+        fullName:
+          type: string
+          example: 'Max Verstappen'
+        nationality:
+          type: string
+          example: 'Dutch'
+
+    Circuit:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Albert Park Circuit'
+        locality:
+          type: string
+          example: 'Melbourne'
+        country:
+          type: string
+          example: 'Australia'
+
+    Winner:
+      type: object
+      properties:
+        driverId:
+          type: string
+          example: 'max_verstappen'
+        fullName:
+          type: string
+          example: 'Max Verstappen'
+        nationality:
+          type: string
+          example: 'Dutch'
+        laps:
+          type: string
+          example: '58'
+        time:
+          type: string
+          example: '1:34:00.000'
+
+    Race:
+      type: object
+      properties:
+        season:
+          type: string
+          example: '2023'
+        round:
+          type: string
+          example: '1'
+        raceName:
+          type: string
+          example: 'Australian Grand Prix'
+        date:
+          type: string
+          format: date
+          example: '2023-03-21'
+        circuit:
+          $ref: '#/components/schemas/Circuit'
+        winner:
+          $ref: '#/components/schemas/Winner'
+        isChampionWinner:
+          type: boolean
+          example: true
+
+    Season:
+      type: object
+      properties:
+        season:
+          type: string
+          example: '2023'
+        championName:
+          type: string
+          example: 'Max Verstappen'
+        nationality:
+          type: string
+          example: 'Dutch'
+
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+          example: 'error'
+        statusCode:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: 'Season/Year is required'
+
+  responses:
+    Success:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: 'success'
+              statusCode:
+                type: integer
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+
+    Error:
+      description: Error response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+paths:
+  /api/seasons:
+    get:
+      tags:
+        - Seasons
+      summary: Get all F1 seasons with their champions
+      description: Retrieves a list of F1 seasons from 2005 onwards with their respective world champions
+      responses:
+        '200':
+          description: List of seasons retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/responses/Success'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Season'
+        '500':
+          $ref: '#/components/responses/Error'
+
+  /api/seasons/{season}/races:
+    get:
+      tags:
+        - Races
+      summary: Get all races for a specific season
+      description: Retrieves all race winners for a specific F1 season, indicating if the winner was that year's champion
+      parameters:
+        - name: season
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The F1 season year (e.g., 2023)
+          example: '2023'
+      responses:
+        '200':
+          description: List of races retrieved successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/responses/Success'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Race'
+        '400':
+          $ref: '#/components/responses/Error'
+        '500':
+          $ref: '#/components/responses/Error'

@@ -5,8 +5,8 @@ import { APIError } from '../../../lib/api/errorHandler';
 
 vi.mock('../../../lib/api/axiosSetup', () => ({
   default: {
-    get: vi.fn()
-  }
+    get: vi.fn(),
+  },
 }));
 
 describe('Race Winners API', () => {
@@ -28,11 +28,11 @@ describe('Race Winners API', () => {
               winner: {
                 firstName: 'Max',
                 lastName: 'Verstappen',
-                constructor: 'Red Bull'
-              }
-            }
-          ]
-        }
+                constructor: 'Red Bull',
+              },
+            },
+          ],
+        },
       };
 
       vi.mocked(axiosInstance.get).mockResolvedValueOnce(mockResponse);
@@ -47,13 +47,13 @@ describe('Race Winners API', () => {
           winner: {
             firstName: 'Max',
             lastName: 'Verstappen',
-            constructor: 'Red Bull'
-          }
-        }
+            constructor: 'Red Bull',
+          },
+        },
       ]);
 
       expect(axiosInstance.get).toHaveBeenCalledWith(`/seasons/${season}/races`, {
-        timeout: 10000
+        timeout: 10000,
       });
     });
 
@@ -63,7 +63,7 @@ describe('Race Winners API', () => {
 
       await expect(getRaceWinners(season)).rejects.toThrow(APIError);
       expect(axiosInstance.get).toHaveBeenCalledWith(`/seasons/${season}/races`, {
-        timeout: 10000
+        timeout: 10000,
       });
     });
 
@@ -73,15 +73,15 @@ describe('Race Winners API', () => {
 
       await expect(getRaceWinners(season)).rejects.toThrow(APIError);
       expect(axiosInstance.get).toHaveBeenCalledWith(`/seasons/${season}/races`, {
-        timeout: 10000
+        timeout: 10000,
       });
     });
 
     it('handles empty response data', async () => {
       const mockResponse = {
         data: {
-          data: []
-        }
+          data: [],
+        },
       };
 
       vi.mocked(axiosInstance.get).mockResolvedValueOnce(mockResponse);
@@ -89,7 +89,7 @@ describe('Race Winners API', () => {
       const result = await getRaceWinners(season);
       expect(result).toEqual([]);
       expect(axiosInstance.get).toHaveBeenCalledWith(`/seasons/${season}/races`, {
-        timeout: 10000
+        timeout: 10000,
       });
     });
 
@@ -97,7 +97,7 @@ describe('Race Winners API', () => {
       const mockResponse = {
         data: {
           // Missing data property
-        }
+        },
       };
 
       vi.mocked(axiosInstance.get).mockResolvedValueOnce(mockResponse);
@@ -105,7 +105,7 @@ describe('Race Winners API', () => {
       const result = await getRaceWinners(season);
       expect(result).toEqual([]);
       expect(axiosInstance.get).toHaveBeenCalledWith(`/seasons/${season}/races`, {
-        timeout: 10000
+        timeout: 10000,
       });
     });
 
@@ -116,11 +116,11 @@ describe('Race Winners API', () => {
             {
               round: '1',
               raceName: 'Bahrain Grand Prix',
-              circuit: 'Bahrain International Circuit'
+              circuit: 'Bahrain International Circuit',
               // Missing winner data
-            }
-          ]
-        }
+            },
+          ],
+        },
       };
 
       vi.mocked(axiosInstance.get).mockResolvedValueOnce(mockResponse);
@@ -130,12 +130,12 @@ describe('Race Winners API', () => {
         {
           round: '1',
           raceName: 'Bahrain Grand Prix',
-          circuit: 'Bahrain International Circuit'
-        }
+          circuit: 'Bahrain International Circuit',
+        },
       ]);
       expect(axiosInstance.get).toHaveBeenCalledWith(`/seasons/${season}/races`, {
-        timeout: 10000
+        timeout: 10000,
       });
     });
   });
-}); 
+});

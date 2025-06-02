@@ -90,7 +90,7 @@ const DefaultErrorIcon = () => (
 
 const getIconByType = (type: ErrorType = 'unknown', customIcon?: React.ReactNode) => {
   if (customIcon) return customIcon;
-  
+
   switch (type) {
     case 'network':
       return <NetworkErrorIcon />;
@@ -109,15 +109,15 @@ const Error: React.FC<ErrorProps> = ({
   icon,
   action,
   secondaryAction,
-  details
+  details,
 }) => {
   return (
     <div className={`error-container ${type}`}>
       <div className="error-content">
-        <svg 
+        <svg
           data-testid="error-icon"
           className="error-icon"
-          xmlns="http://www.w3.org/2000/svg" 
+          xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -129,22 +129,20 @@ const Error: React.FC<ErrorProps> = ({
         </svg>
         <div className="error-text">
           <p className="error-message">{message}</p>
-          {details && <p data-testid="error-details" className="error-details">{details}</p>}
+          {details && (
+            <p data-testid="error-details" className="error-details">
+              {details}
+            </p>
+          )}
         </div>
         <div className="error-actions">
           {action && (
-            <button 
-              className="error-action primary"
-              onClick={action.onClick}
-            >
+            <button className="error-action primary" onClick={action.onClick}>
               {action.label}
             </button>
           )}
           {secondaryAction && (
-            <button 
-              className="error-action secondary"
-              onClick={secondaryAction.onClick}
-            >
+            <button className="error-action secondary" onClick={secondaryAction.onClick}>
               {secondaryAction.label}
             </button>
           )}
@@ -154,4 +152,4 @@ const Error: React.FC<ErrorProps> = ({
   );
 };
 
-export { Error }; 
+export { Error };

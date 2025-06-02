@@ -7,10 +7,13 @@ import type { IRaceWinner } from '../types/raceWinners.types';
 
 export const getRaceWinners = async (season: string): Promise<IRaceWinner[]> => {
   try {
-    const response = await axiosInstance.get<ApiResponse<IRaceWinner[]>>(API_ROUTES.RACE_WINNERS(season), {
-      timeout: 10000 // 10 second timeout for this specific endpoint
-    });
-    return response.data.data || [];  // Return empty array if data is undefined
+    const response = await axiosInstance.get<ApiResponse<IRaceWinner[]>>(
+      API_ROUTES.RACE_WINNERS(season),
+      {
+        timeout: 10000, // 10 second timeout for this specific endpoint
+      },
+    );
+    return response.data.data || []; // Return empty array if data is undefined
   } catch (error) {
     const details = getErrorDetails(error instanceof Error ? error : new Error('Unknown error'));
     throw new APIError(details.message, undefined, details.details);
