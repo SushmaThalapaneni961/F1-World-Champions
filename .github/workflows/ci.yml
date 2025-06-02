@@ -84,10 +84,9 @@ jobs:
       working-directory: backend
       env:
         MONGO_URL: mongodb://localhost:27017/testdb
-        NODE_ENV: test
         CI: true
         SKIP_REDIS: true
-      run: npm run test:coverage
+      run: npm run test
 
     - name: Build backend
       working-directory: backend
