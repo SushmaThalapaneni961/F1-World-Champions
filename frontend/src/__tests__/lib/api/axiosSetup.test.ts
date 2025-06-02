@@ -1,9 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import axios, {
-  AxiosInstance,
-  InternalAxiosRequestConfig,
-  AxiosResponse,
-} from 'axios';
+import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { StaticDomainApi } from '../../../lib/api/helperApi';
 import { isNetworkError, getErrorDetails } from '../../../utils/errorHandling';
 
