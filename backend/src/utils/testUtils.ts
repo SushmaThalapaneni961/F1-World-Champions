@@ -13,7 +13,10 @@ export const connectTestDb = async () => {
           dbName: 'testdb',
         },
         binary: {
-          version: '4.4.0',
+          version: '6.0.12',
+          downloadDir: './.cache/mongodb-binaries',
+          platform: process.platform,
+          arch: process.arch
         },
       });
     }

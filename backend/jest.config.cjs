@@ -27,5 +27,8 @@ module.exports = {
     '!src/server.ts',
   ],
   verbose: true,
-  testTimeout: 30000,
+  testTimeout: 60000,
+  maxWorkers: 1,
+  globalSetup: '<rootDir>/src/__tests__/setup.ts',
+  globalTeardown: '<rootDir>/src/__tests__/teardown.ts',
 };

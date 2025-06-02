@@ -5,6 +5,18 @@ import * as raceController from '../../controllers/raceController';
 
 jest.mock('../../controllers/raceController');
 
+// Mock console methods
+const originalConsole = { ...console };
+beforeAll(() => {
+  console.warn = jest.fn();
+  console.error = jest.fn();
+});
+
+afterAll(() => {
+  console.warn = originalConsole.warn;
+  console.error = originalConsole.error;
+});
+
 describe('Race Routes', () => {
   let app: express.Application;
 
