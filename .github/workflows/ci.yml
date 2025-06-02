@@ -33,6 +33,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wget
+        wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+        sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+        sudo apt-get install -y openssl
+
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
@@ -76,6 +84,9 @@ jobs:
       working-directory: backend
       env:
         MONGO_URL: mongodb://localhost:27017/testdb
+        NODE_ENV: test
+        CI: true
+        SKIP_REDIS: true
       run: npm run test:coverage
 
     - name: Build backend
