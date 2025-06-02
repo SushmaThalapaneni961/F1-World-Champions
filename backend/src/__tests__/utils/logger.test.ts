@@ -23,7 +23,9 @@ describe('Logger', () => {
 
     // Assert
     expect(mockConsoleLog).toHaveBeenCalledWith(
-      expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[INFO\]: Test message/)
+      expect.stringMatching(
+        /\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[INFO\]: Test message/,
+      ),
     );
   });
 
@@ -36,7 +38,9 @@ describe('Logger', () => {
 
     // Assert
     expect(mockConsoleLog).toHaveBeenCalledWith(
-      expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[ERROR\]: Test error/)
+      expect.stringMatching(
+        /\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[ERROR\]: Test error/,
+      ),
     );
   });
 
@@ -49,7 +53,9 @@ describe('Logger', () => {
 
     // Assert
     expect(mockConsoleLog).toHaveBeenCalledWith(
-      expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[WARN\]: Test warning/)
+      expect.stringMatching(
+        /\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[WARN\]: Test warning/,
+      ),
     );
   });
 
@@ -62,7 +68,9 @@ describe('Logger', () => {
 
     // Assert
     expect(mockConsoleLog).toHaveBeenCalledWith(
-      expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[ERROR\]: Test error/)
+      expect.stringMatching(
+        /\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[ERROR\]: Test error/,
+      ),
     );
   });
 
@@ -72,7 +80,7 @@ describe('Logger', () => {
 
     // Assert
     expect(mockConsoleLog).toHaveBeenCalledWith(
-      expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[INFO\]: undefined/)
+      expect.stringMatching(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\] \[INFO\]: undefined/),
     );
   });
 });
