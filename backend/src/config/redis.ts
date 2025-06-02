@@ -9,14 +9,17 @@ const redisClient = createClient({
   url: `redis://${redisHost}:${redisPort}`,
 });
 
-redisClient.on('error', (err: any) => {
-  logger.error(`Redis Client Error: ${err.message}`);
+redisClient.on('error', (err) => {
+  logger.warn(`Redis Client Error: ${err.message}`);
 });
 
-const connectRedis = async () => {
-  await withRetry(() => redisClient.connect(), 'Redis connection');
-  logger.info('Redis connected successfully');
+export const connectRedis = async () => {
+  try {
+    await withRetry(() => redisClient.connect(), 'Redis connection');
+    logger.info('Redis connected successfully');
+  } catch (error) {
+    logger.warn(`Redis connection failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
 };
-connectRedis();
 
 export default redisClient;

@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import { IRace } from '../../types/race.types';
+import Race from '../../models/race.model';
 
 let mongoServer: MongoMemoryServer | null = null;
 
@@ -20,49 +21,47 @@ export const connectTestDb = async () => {
     if (!mongoServer) {
       mongoServer = await MongoMemoryServer.create({
         instance: {
-          port: 27018,
-          dbName: 'testdb',
+          port: 27019,
+          dbName: 'f1_test'
         },
         binary: {
-          version: '4.4.0',
-        },
+          version: '6.0.12'
+        }
       });
     }
     const mongoUri = mongoServer.getUri();
     await mongoose.connect(mongoUri);
-  } catch (err) {
-    console.error('Failed to connect to test database:', err);
-    throw err;
+  } catch (error) {
+    console.error('Failed to connect to test database:', error);
+    throw error;
   }
 };
 
 export const disconnectTestDb = async () => {
   try {
-    if (mongoose.connection.readyState !== 0) {
-      await mongoose.disconnect();
-    }
+    await mongoose.disconnect();
     if (mongoServer) {
-      await mongoServer.stop({ doCleanup: true, force: true });
+      await mongoServer.stop();
       mongoServer = null;
     }
-  } catch (err) {
-    console.error('Failed to disconnect from test database:', err);
-    throw err;
+  } catch (error) {
+    console.error('Failed to disconnect test database:', error);
+    throw error;
   }
 };
 
 export const clearTestDb = async () => {
+  if (!mongoose.connection.db) {
+    throw new Error('No database connection');
+  }
   try {
-    if (mongoose.connection.readyState !== 1) {
-      await connectTestDb();
-    }
-    const collections = mongoose.connection.collections;
-    for (const key in collections) {
-      await collections[key].deleteMany({});
-    }
-  } catch (err) {
-    console.error('Failed to clear test database:', err);
-    throw err;
+    await Promise.all([
+      Race.deleteMany({}),
+      // Add other model cleanups here if needed
+    ]);
+  } catch (error) {
+    console.error('Failed to clear test database:', error);
+    throw error;
   }
 };
 
@@ -103,3 +102,23 @@ export const generateMockRace = (overrides: Partial<IRace> = {}): IRace => {
     ...overrides,
   };
 };
+
+export const generateMockRaceData = (overrides = {}) => ({
+  season: '2023',
+  round: '1',
+  raceName: 'Test Grand Prix',
+  date: '2023-03-05',
+  circuit: {
+    name: 'Test Circuit',
+    locality: 'Test City',
+    country: 'Test Country',
+  },
+  winner: {
+    driverId: 'test_driver',
+    fullName: 'Test Driver',
+    nationality: 'Test Nation',
+    laps: '50',
+    time: '1:30:00.000',
+  },
+  ...overrides,
+});
