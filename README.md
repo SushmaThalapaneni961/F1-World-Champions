@@ -7,7 +7,7 @@ A full-stack web application that displays Formula 1 World Champions from 2005 t
 - **Championship Data**: View F1 World Champions from 2005 to present
 - **Race Details**: Click on a season to see all race winners for that year
 - **Champion Highlights**: Races where the winner became that season's champion are highlighted
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Responsive Design**: Works seamlessly on desktop and mobile devices (Displaying Table in desktop/larder devices and Cards on mobile or smaller devices)
 - **Type Safety**: Fully typed with TypeScript
 - **Caching**: Redis caching for improved performance
 - **API Documentation**: Complete OpenAPI/Swagger documentation
@@ -63,7 +63,7 @@ Once all containers are running, you can access:
 
 1. **Frontend Application**
    - URL: http://localhost:5173
-   - View F1 World Champions and race results
+   - View F1 World Champions seasons and race results
 
 2. **Backend API & Documentation**
    - API Base URL: http://localhost:5001
@@ -77,7 +77,7 @@ Once all containers are running, you can access:
      - Password: pass
    - Database name: f1
    - View collections:
-     - champions
+     - seasons
      - races
 
 ### Verifying Setup
@@ -119,7 +119,6 @@ docker compose down -v
 ### Frontend
 - **React 18+** with TypeScript
 - **Jotai** for state management
-- **Material-UI (MUI)** for components
 - **Vite** for build tooling
 - **Vitest** for testing
 - **Axios** for API requests
@@ -150,11 +149,6 @@ docker compose down -v
 - Default credentials: admin/pass
 - Database: f1
 - View, edit, and query data directly
-
-### Cache Management
-- View cache status via API endpoint: GET /api/cache/status
-- Clear cache: POST /api/cache/clear
-- Monitor Redis: http://localhost:8081
 
 ## 🧪 Testing
 
@@ -216,7 +210,7 @@ f1-world-champions/
 3. **Cache Issues**
    - Verify Redis is running: `docker compose ps`
    - Check Redis logs: `docker compose logs redis`
-   - Clear cache if needed: `curl -X POST http://localhost:5001/api/cache/clear`
+   - Clear cache if needed
 
 ### Performance Optimization
 - Enable Redis cache for better performance
